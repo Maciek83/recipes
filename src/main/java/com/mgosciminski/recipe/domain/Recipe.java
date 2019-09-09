@@ -1,6 +1,8 @@
 package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -22,6 +24,7 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "recipe")
     private Note notes;
 
-
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients = new HashSet<>();
 
 }

@@ -11,7 +11,7 @@ public class Note {
     @Lob
     private String notes;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Recipe recipe;
 
     public Long getId() {
