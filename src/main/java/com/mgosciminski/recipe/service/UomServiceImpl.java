@@ -25,8 +25,8 @@ public class UomServiceImpl implements UomService {
 
     @Override
     public UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto) {
-        UnitOfMeasure c = converter.convert(new UnitOfMeasureDto());
-        return uomRepository.save(c);
+
+        return uomRepository.save(converter.convert(unitOfMeasureDto));
     }
 
     @Override
