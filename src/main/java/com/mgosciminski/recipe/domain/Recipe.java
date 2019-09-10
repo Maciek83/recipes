@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Recipe {
+public class Recipe{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Category {
+public class Category{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

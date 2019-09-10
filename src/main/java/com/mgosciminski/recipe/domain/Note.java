@@ -3,7 +3,7 @@ package com.mgosciminski.recipe.domain;
 import javax.persistence.*;
 
 @Entity
-public class Note {
+public class Note{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
