@@ -13,7 +13,8 @@ public class UomDToToUnitOfMeasure implements Converter<UnitOfMeasureDto, UnitOf
     @Override
     public UnitOfMeasure convert(UnitOfMeasureDto unitOfMeasureDto) {
 
-        if(unitOfMeasureDto == null) return null;
+        if(unitOfMeasureDto == null)
+        {return null;}
 
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setUom(unitOfMeasureDto.getUom());
