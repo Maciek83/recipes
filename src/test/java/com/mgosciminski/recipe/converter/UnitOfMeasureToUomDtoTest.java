@@ -35,6 +35,7 @@ public class UnitOfMeasureToUomDtoTest {
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setUom(UOM);
 
+
         UnitOfMeasureDto unitOfMeasureDto = converter.convert(unitOfMeasure);
 
         assertEquals(unitOfMeasureDto.getUom(),UOM);
