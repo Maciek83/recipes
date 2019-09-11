@@ -1,5 +1,6 @@
 package com.mgosciminski.recipe.service;
 
+import com.mgosciminski.recipe.converter.IngredientDtoToIngredient;
 import com.mgosciminski.recipe.converter.UomDToToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;

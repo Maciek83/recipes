@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.domain.Ingredient;
+import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.IngredientDto;
 
 import java.util.Optional;

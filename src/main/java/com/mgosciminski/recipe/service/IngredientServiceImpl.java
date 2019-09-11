@@ -2,53 +2,72 @@ package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.converter.IngredientDtoToIngredient;
 import com.mgosciminski.recipe.domain.Ingredient;
+import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.repository.IngredientRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class IngredientServiceImpl implements IngredientService {
 
-    private final IngredientRepository repository;
-    private final IngredientDtoToIngredient converter;
+    private final IngredientRepository ingredientRepository;
+    private final IngredientDtoToIngredient ingredientConverter;
+
+    private final UomService uomService;
 
     private final Ingredient nullObject = new Ingredient();
     private final String BAD = "bad";
 
 
-    public IngredientServiceImpl(IngredientRepository repository, IngredientDtoToIngredient converter) {
-        this.repository = repository;
-        this.converter = converter;
+    public IngredientServiceImpl(IngredientRepository ingredientRepository,
+                                 IngredientDtoToIngredient ingredientConverter,
+                                 UomService uomService) {
+        this.ingredientRepository = ingredientRepository;
+        this.ingredientConverter = ingredientConverter;
+        this.uomService = uomService;
     }
 
     @Override
     public Iterable<Ingredient> findAll() {
-        return repository.findAll();
+        return ingredientRepository.findAll();
     }
 
     @Override
     public Ingredient save(IngredientDto ingredientDto) {
 
-        return repository.save(converter.convert(ingredientDto));
+        UnitOfMeasure savedUom = uomService.save(ingredientDto.getUnitOfMeasureDto());
+        Ingredient ingredient = ingredientConverter.convert(ingredientDto);
+
+        if (ingredient != null)
+            ingredient.setUnitOfMeasure(savedUom);
+
+        return ingredientRepository.save(ingredient);
     }
 
     @Override
     public Ingredient findById(Long id) {
 
-        Optional<Ingredient> optionalIngredient = repository.findById(id);
+        Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
 
-        nullObject.setDescription(BAD);
-
-        return optionalIngredient.orElse(nullObject);
+        if (optionalIngredient.isPresent()) {
+            return optionalIngredient.get();
+        } else {
+            nullObject.setDescription(BAD);
+            return nullObject;
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        ingredientRepository.deleteById(id);
     }
 
     @Override
     public void delete(Ingredient ingredient) {
-        repository.delete(ingredient);
+        ingredientRepository.delete(ingredient);
     }
+
+
 }
