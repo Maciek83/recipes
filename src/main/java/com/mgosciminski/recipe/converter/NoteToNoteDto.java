@@ -20,6 +20,7 @@ public class NoteToNoteDto implements Converter<Note, NoteDto> {
 
         NoteDto noteDto = new NoteDto();
         noteDto.setNotes(note.getNotes());
+        noteDto.setId(note.getId());
 
         return noteDto;
     }
