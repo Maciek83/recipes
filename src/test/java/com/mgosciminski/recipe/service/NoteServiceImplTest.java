@@ -48,7 +48,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void findAll() {
+    public void findAll() throws Exception {
 
         //when
         when(noteRepository.findAll()).thenReturn(notes);
@@ -62,7 +62,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void findById() {
+    public void findById() throws Exception {
 
         //given
         Optional<Note> optionalNote = Optional.of(new Note());
@@ -79,7 +79,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void testFindByIdNull()
+    public void testFindByIdNull() throws Exception
     {
         //given
         Optional<Note> emptyNote = Optional.empty();
@@ -96,7 +96,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void saveNoteDto() {
+    public void saveNoteDto() throws Exception {
         //given
         Note note = new Note();
 
@@ -112,7 +112,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void saveNote()
+    public void saveNote() throws Exception
     {
         //given
         Note note = new Note();
@@ -129,7 +129,7 @@ public class NoteServiceImplTest {
     }
 
     @Test
-    public void editNote() {
+    public void editNote() throws Exception {
         //given
         Note note = new Note();
         note.setNotes("notes");

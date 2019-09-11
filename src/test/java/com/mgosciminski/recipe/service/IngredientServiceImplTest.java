@@ -111,7 +111,7 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void deleteById() {
+    public void deleteById() throws Exception {
 
         service.deleteById(1L);
 
@@ -120,7 +120,7 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws Exception{
 
         service.delete(new Ingredient());
 

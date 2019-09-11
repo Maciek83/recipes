@@ -72,7 +72,7 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws Exception {
         //when
         uomService.delete(new UnitOfMeasure());
 
@@ -81,7 +81,7 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void deleteById() {
+    public void deleteById() throws Exception {
         //when
         uomService.delete(1L);
 
