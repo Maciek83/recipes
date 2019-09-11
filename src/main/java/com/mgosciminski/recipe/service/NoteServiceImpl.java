@@ -4,6 +4,7 @@ import com.mgosciminski.recipe.converter.NoteDtoToNote;
 import com.mgosciminski.recipe.domain.Note;
 import com.mgosciminski.recipe.model.NoteDto;
 import com.mgosciminski.recipe.repository.NoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,14 +12,11 @@ import java.util.Optional;
 @Service
 public class NoteServiceImpl implements NoteService {
 
-    private NoteRepository noteRepository;
-    private NoteDtoToNote converter;
+    private final NoteRepository noteRepository;
+    private final NoteDtoToNote converter;
 
     private Note nullObject = new Note();
     private final String BAD = "bad";
-
-    public NoteServiceImpl() {
-    }
 
     public NoteServiceImpl(NoteRepository noteRepository, NoteDtoToNote converter) {
         this.noteRepository = noteRepository;
