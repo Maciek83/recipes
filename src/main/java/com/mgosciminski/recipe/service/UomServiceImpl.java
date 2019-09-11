@@ -1,7 +1,6 @@
 package com.mgosciminski.recipe.service;
 
-import com.mgosciminski.recipe.converter.IngredientDtoToIngredient;
-import com.mgosciminski.recipe.converter.UomDToToUnitOfMeasure;
+import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
@@ -11,10 +10,10 @@ import org.springframework.stereotype.Service;
 public class UomServiceImpl implements UomService {
 
     private final UomRepository uomRepository;
-    private final UomDToToUnitOfMeasure converter;
+    private final UomDtoToUnitOfMeasure converter;
 
     public UomServiceImpl(UomRepository uomRepository,
-                          UomDToToUnitOfMeasure converter) {
+                          UomDtoToUnitOfMeasure converter) {
         this.uomRepository = uomRepository;
         this.converter = converter;
     }

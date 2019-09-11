@@ -14,7 +14,6 @@ public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
     private final IngredientDtoToIngredient ingredientConverter;
-
     private final UomService uomService;
 
     private final Ingredient nullObject = new Ingredient();

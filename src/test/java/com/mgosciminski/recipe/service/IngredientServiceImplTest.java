@@ -25,6 +25,8 @@ public class IngredientServiceImplTest {
     IngredientRepository repository;
     @Mock
     IngredientDtoToIngredient converter;
+    @Mock
+    UomService uomService;
 
     @InjectMocks
     IngredientServiceImpl service;

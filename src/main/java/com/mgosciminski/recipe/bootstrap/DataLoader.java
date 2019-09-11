@@ -32,7 +32,7 @@ public class DataLoader implements CommandLineRunner {
 
         ingredientService.save(ingredientDto);
 
-        System.out.println("ingredient loaded");
+        System.out.println("data loaded");
 
     }
 }

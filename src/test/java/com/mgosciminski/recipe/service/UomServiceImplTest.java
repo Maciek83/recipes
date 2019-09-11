@@ -1,6 +1,6 @@
 package com.mgosciminski.recipe.service;
 
-import com.mgosciminski.recipe.converter.UomDToToUnitOfMeasure;
+import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
@@ -23,7 +23,7 @@ public class UomServiceImplTest {
     @Mock
     private UomRepository uomRepository;
     @Mock
-    private UomDToToUnitOfMeasure converter;
+    private UomDtoToUnitOfMeasure converter;
 
     @InjectMocks
     private UomServiceImpl uomService;

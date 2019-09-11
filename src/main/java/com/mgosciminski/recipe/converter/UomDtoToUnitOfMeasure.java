@@ -7,12 +7,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UomDToToUnitOfMeasure implements Converter<UnitOfMeasureDto, UnitOfMeasure> {
+public class UomDtoToUnitOfMeasure implements Converter<UnitOfMeasureDto, UnitOfMeasure> {
 
-    //todo add test
+
     @Nullable
     @Override
-    public UnitOfMeasure convert(UnitOfMeasureDto unitOfMeasureDto) {
+    public synchronized UnitOfMeasure convert(UnitOfMeasureDto unitOfMeasureDto) {
 
         if(unitOfMeasureDto == null)
         {return null;}
