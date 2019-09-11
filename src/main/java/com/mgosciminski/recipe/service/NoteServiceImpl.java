@@ -4,7 +4,6 @@ import com.mgosciminski.recipe.converter.NoteDtoToNote;
 import com.mgosciminski.recipe.domain.Note;
 import com.mgosciminski.recipe.model.NoteDto;
 import com.mgosciminski.recipe.repository.NoteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
