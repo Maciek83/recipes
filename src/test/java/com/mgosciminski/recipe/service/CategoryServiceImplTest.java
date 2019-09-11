@@ -70,7 +70,7 @@ public class CategoryServiceImplTest {
 
         //then
         assertNotNull(result);
-        assertEquals(result.getDepartmentName(),BAD);
+        assertEquals(result.getName(),BAD);
 
         verify(categoryRepository).findById(anyLong());
     }
@@ -131,12 +131,12 @@ public class CategoryServiceImplTest {
     {
         //given
         Category category = new Category();
-        category.setDepartmentName("name");
+        category.setName("name");
 
         //when
         doReturn(category).when(categoryServiceSpy).findById(anyLong());
         Category result = categoryServiceSpy.findById(1L);
-        result.setDepartmentName("newName");
+        result.setName("newName");
         doReturn(result).when(categoryServiceSpy).save(any(Category.class));
         Category savedInDataBase = categoryServiceSpy.save(result);
 
@@ -144,7 +144,7 @@ public class CategoryServiceImplTest {
         assertNotNull(savedInDataBase);
         assertEquals(category,result);
         assertEquals(result,savedInDataBase);
-        assertEquals(savedInDataBase.getDepartmentName(),"newName");
+        assertEquals(savedInDataBase.getName(),"newName");
 
         verify(categoryServiceSpy).findById(anyLong());
         verify(categoryServiceSpy).save(any(Category.class));

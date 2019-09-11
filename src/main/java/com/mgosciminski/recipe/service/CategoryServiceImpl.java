@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         else
         {
-            nullObject.setDepartmentName(BAD);
+            nullObject.setName(BAD);
             return nullObject;
         }
     }
@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category edit(CategoryDto categoryDto) {
         Category fromDataBase = findById(categoryDto.getId());
-        fromDataBase.setDepartmentName(categoryDto.getDepartmentName());
+        fromDataBase.setName(categoryDto.getName());
         return save(fromDataBase);
     }
 

@@ -25,13 +25,14 @@ public class IngredientToIngredientDtoTest {
     IngredientToIngredientDto converter;
 
     @Test
-    public void convertNull()
+    public void convertNull() throws Exception
     {
         assertNull(converter.convert(null));
     }
 
     @Test
-    public void convert() {
+    public void convert() throws Exception
+    {
 
         Ingredient ingredient = new Ingredient();
         ingredient.setDescription("description");

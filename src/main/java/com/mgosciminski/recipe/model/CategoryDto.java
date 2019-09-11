@@ -3,7 +3,7 @@ package com.mgosciminski.recipe.model;
 public class CategoryDto {
 
     private Long id;
-    private String departmentName;
+    private String name;
 
     public Long getId() {
         return id;
@@ -13,11 +13,11 @@ public class CategoryDto {
         this.id = id;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getName() {
+        return name;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

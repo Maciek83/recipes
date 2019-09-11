@@ -20,7 +20,7 @@ public class CategoryDtoToCategory implements Converter<CategoryDto, Category> {
         }
 
         Category category = new Category();
-        category.setDepartmentName(categoryDto.getDepartmentName());
+        category.setName(categoryDto.getName());
 
         return category;
     }

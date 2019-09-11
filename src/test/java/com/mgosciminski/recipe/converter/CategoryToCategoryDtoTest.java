@@ -12,12 +12,13 @@ public class CategoryToCategoryDtoTest {
     CategoryToCategoryDto converter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()
+    {
         converter = new CategoryToCategoryDto();
     }
 
     @Test
-    public void convertNull()
+    public void convertNull() throws Exception
     {
         CategoryDto categoryDtoNull = converter.convert(null);
 
@@ -25,12 +26,13 @@ public class CategoryToCategoryDtoTest {
     }
 
     @Test
-    public void convert() {
+    public void convert() throws Exception
+    {
         //given
         Long id = 1L;
         Category category = new Category();
         category.setId(id);
-        category.setDepartmentName("name");
+        category.setName("name");
 
         //when
         CategoryDto categoryDto = converter.convert(category);
@@ -38,7 +40,7 @@ public class CategoryToCategoryDtoTest {
         //then
         assertNotNull(categoryDto);
         assertEquals(categoryDto.getId(),id);
-        assertEquals(categoryDto.getDepartmentName(),"name");
+        assertEquals(categoryDto.getName(),"name");
 
     }
 }

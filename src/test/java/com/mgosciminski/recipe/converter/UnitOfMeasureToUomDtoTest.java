@@ -30,7 +30,8 @@ public class UnitOfMeasureToUomDtoTest {
     }
 
     @Test
-    public void convert() {
+    public void convert() throws Exception
+    {
 
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setUom(UOM);

@@ -10,7 +10,7 @@ public class Category{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String departmentName;
+    private String name;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private Set<Recipe> recipes = new HashSet<>();
@@ -23,12 +23,12 @@ public class Category{
         this.id = id;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getName() {
+        return name;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<Recipe> getRecipes() {

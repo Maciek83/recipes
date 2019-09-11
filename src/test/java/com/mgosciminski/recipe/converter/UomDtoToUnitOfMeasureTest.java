@@ -4,7 +4,6 @@ import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import static org.junit.Assert.*;
