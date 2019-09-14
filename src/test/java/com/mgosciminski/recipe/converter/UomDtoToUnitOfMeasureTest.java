@@ -30,12 +30,14 @@ public class UomDtoToUnitOfMeasureTest {
     @Test
     public void convert() throws Exception
     {
-
+        //given
         UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
         unitOfMeasureDto.setUom("uom");
 
+        //when
         UnitOfMeasure converted = converter.convert(unitOfMeasureDto);
 
+        //then
         assertNotNull(converted);
         assertEquals(unitOfMeasureDto.getUom(),converted.getUom());
     }

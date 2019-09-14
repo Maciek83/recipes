@@ -5,17 +5,15 @@ import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 
 public class UnitOfMeasureToUomDtoTest {
 
-    public static final Long ID_VALUE = 1L;
-    public static final String UOM = "uom";
 
+    private static final String UOM = "uom";
 
-    UnitOfMeasureToUomDto converter;
+    private UnitOfMeasureToUomDto converter;
 
     @Before
     public void setUp() throws Exception {
@@ -32,13 +30,15 @@ public class UnitOfMeasureToUomDtoTest {
     @Test
     public void convert() throws Exception
     {
-
+        //given
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setUom(UOM);
 
-
+        //when
         UnitOfMeasureDto unitOfMeasureDto = converter.convert(unitOfMeasure);
 
+        //then
+        assertNotNull(unitOfMeasureDto);
         assertEquals(unitOfMeasureDto.getUom(),UOM);
     }
 }

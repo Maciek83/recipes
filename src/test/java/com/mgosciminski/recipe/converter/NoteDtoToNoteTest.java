@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class NoteDtoToNoteTest {
 
-    NoteDtoToNote converter;
+    private NoteDtoToNote converter;
 
     @Before
     public void setUp() throws Exception {

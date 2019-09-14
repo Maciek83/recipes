@@ -39,6 +39,10 @@ public class RecipeDtoToRecipeTest {
         Recipe resultNull = recipeDtoToRecipe.convert(null);
 
         assertNull(resultNull);
+
+        verifyZeroInteractions(noteDtoToNote);
+        verifyZeroInteractions(ingredientDtoToIngredient);
+        verifyZeroInteractions(categoryDtoToCategory);
     }
 
     @Test

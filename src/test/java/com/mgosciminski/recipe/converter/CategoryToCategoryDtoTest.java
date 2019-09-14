@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class CategoryToCategoryDtoTest {
 
-    CategoryToCategoryDto converter;
+    private CategoryToCategoryDto converter;
 
     @Before
     public void setUp()
