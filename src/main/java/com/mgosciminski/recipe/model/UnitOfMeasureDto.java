@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.model;
 
 public class UnitOfMeasureDto {
+
     private String uom;
 
     public String getUom() {

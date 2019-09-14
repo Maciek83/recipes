@@ -59,7 +59,24 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void save() throws Exception {
+    public void saveIngredient() throws Exception
+    {
+        //given
+        Ingredient ingredient = new Ingredient();
+
+        //when
+        when(repository.save(any())).thenReturn(ingredient);
+        Ingredient ingredientSaved = service.save(new Ingredient());
+
+        //then
+        assertNotNull(ingredientSaved);
+        assertEquals(ingredient,ingredientSaved);
+
+        verify(repository).save(any());
+    }
+
+    @Test
+    public void saveIngredientDto() throws Exception {
 
         //given
         Ingredient ingredient = new Ingredient();
