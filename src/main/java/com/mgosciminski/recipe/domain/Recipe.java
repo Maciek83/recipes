@@ -27,7 +27,7 @@ public class Recipe{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "recipe_category",
             joinColumns = @JoinColumn(name="recipe_id"),

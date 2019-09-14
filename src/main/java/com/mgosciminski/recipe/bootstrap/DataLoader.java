@@ -1,51 +1,42 @@
 package com.mgosciminski.recipe.bootstrap;
 
 import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.model.IngredientDto;
-import com.mgosciminski.recipe.model.NoteDto;
-import com.mgosciminski.recipe.model.UnitOfMeasureDto;
-import com.mgosciminski.recipe.service.CategoryService;
-import com.mgosciminski.recipe.service.IngredientService;
-import com.mgosciminski.recipe.service.NoteService;
-import com.mgosciminski.recipe.service.UomService;
+import com.mgosciminski.recipe.domain.Recipe;
+import com.mgosciminski.recipe.model.*;
+import com.mgosciminski.recipe.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private final UomService uomService;
-    private final IngredientService ingredientService;
-    private final NoteService noteService;
-    private final CategoryService categoryService;
+    private final RecipeService recipeService;
 
-    public DataLoader(UomService uomService, IngredientService ingredientService, NoteService noteService, CategoryService categoryService) {
-        this.uomService = uomService;
-        this.ingredientService = ingredientService;
-        this.noteService = noteService;
-        this.categoryService = categoryService;
+    public DataLoader(RecipeService recipeService) {
+
+        this.recipeService = recipeService;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
-        unitOfMeasureDto.setUom("kilos");
+        Set<IngredientDto> ingredientDtos = new HashSet<>();
+        ingredientDtos.add(new IngredientDto());
+        Set<CategoryDto> categoryDtos = new HashSet<>();
+        categoryDtos.add(new CategoryDto());
+        categoryDtos.add(new CategoryDto());
 
-        IngredientDto ingredientDto = new IngredientDto();
-        ingredientDto.setDescription("cola");
-        ingredientDto.setUnitOfMeasureDto(unitOfMeasureDto);
-
-        ingredientService.save(ingredientDto);
-
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setDifficulty("EASY");
         NoteDto noteDto = new NoteDto();
-        noteDto.setNotes("myNotes");
-        noteService.save(noteDto);
+        recipeDto.setNoteDto(noteDto);
+        recipeDto.setIngredientDtos(ingredientDtos);
+        recipeDto.setCategoryDtos(categoryDtos);
 
-        Category category = new Category();
-        category.setName("departName");
-
-        categoryService.save(category);
+        recipeService.save(recipeDto);
 
         System.out.println("data loaded");
 

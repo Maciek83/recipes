@@ -95,9 +95,6 @@ public class RecipeServiceImplTest {
 
         //when
         when(recipeDtoToRecipe.convert(any(RecipeDto.class))).thenReturn(recipe);
-        when(noteService.save(any(Note.class))).thenReturn(new Note());
-        when(ingredientService.save(any(Ingredient.class))).thenReturn(new Ingredient());
-        when(categoryService.save(any(Category.class))).thenReturn(new Category());
         when(repository.save(any(Recipe.class))).thenReturn(recipe);
 
         Recipe result = service.save(new RecipeDto());
@@ -107,10 +104,7 @@ public class RecipeServiceImplTest {
         assertEquals(recipe.getDifficulty(),result.getDifficulty());
 
         verify(recipeDtoToRecipe).convert(any(RecipeDto.class));
-        verify(repository).save(any(Recipe.class));
-        verify(noteService).save(any(Note.class));
-        verify(ingredientService,times(2)).save(any(Ingredient.class));
-        verify(categoryService,times(2)).save(any(Category.class));
+        verify(repository,times(2)).save(any(Recipe.class));
 
     }
 

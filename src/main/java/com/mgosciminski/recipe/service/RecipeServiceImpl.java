@@ -35,16 +35,11 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe save(RecipeDto recipeDto) {
 
         Recipe recipe = recipeDtoToRecipe.convert(recipeDto);
+        Recipe saved = save(recipe);
+        saved.getNotes().setRecipe(saved);
+        saved.getIngredients().forEach(ingredient -> ingredient.setRecipe(saved));
 
-        noteService.save(recipe.getNotes());
-
-        Set<Ingredient> ingredients = recipe.getIngredients();
-        ingredients.forEach(ingredientService::save);
-
-        Set<Category> categories = recipe.getCategories();
-        categories.forEach(categoryService::save);
-
-        return repository.save(recipe);
+        return save(recipe);
     }
 
     @Override
