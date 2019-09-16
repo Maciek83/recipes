@@ -40,6 +40,8 @@ public class RecipeServiceImplTest {
     IngredientServiceImpl ingredientService;
     @Mock
     CategoryServiceImpl categoryService;
+    @Mock
+    UomService uomService;
 
 
     @InjectMocks
@@ -55,7 +57,9 @@ public class RecipeServiceImplTest {
     public void setUp() throws Exception {
 
         recipes = new HashSet<>();
-        recipes.add(new Recipe());
+        Recipe recipe = new Recipe();
+        recipe.setDifficulty(Difficulty.HARD);
+        recipes.add(recipe);
         recipes.add(new Recipe());
 
         serviceSpy = Mockito.spy(service);
@@ -83,28 +87,48 @@ public class RecipeServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setDifficulty(Difficulty.HARD);
         recipe.setNotes(new Note());
+
         Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(new Ingredient());
-        ingredients.add(new Ingredient());
+
+        Ingredient ingredient = new Ingredient();
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        unitOfMeasure.getIngredients().add(ingredient);
+        ingredient.setUnitOfMeasure(unitOfMeasure);
+        ingredients.add(ingredient);
+
+        Ingredient ingredient1 = new Ingredient();
+        ingredient1.setDescription("aa");
+        UnitOfMeasure unitOfMeasure1 = new UnitOfMeasure();
+        unitOfMeasure1.setUom("aa");
+        unitOfMeasure1.getIngredients().add(ingredient1);
+        ingredient1.setUnitOfMeasure(unitOfMeasure1);
+        ingredients.add(ingredient1);
+
         recipe.setIngredients(ingredients);
+
         Set<Category> categories = new HashSet<>();
         categories.add(new Category());
         categories.add(new Category());
         recipe.setCategories(categories);
 
-
         //when
-        when(recipeDtoToRecipe.convert(any(RecipeDto.class))).thenReturn(recipe);
-        when(repository.save(any(Recipe.class))).thenReturn(recipe);
-
-        Recipe result = service.save(new RecipeDto());
+        when(recipeDtoToRecipe.convert(any())).thenReturn(recipe);
+        when(noteService.save(any(Note.class))).thenReturn(new Note());
+        when(uomService.save(any(UnitOfMeasure.class))).thenReturn(new UnitOfMeasure());
+        when(ingredientService.save(any(Ingredient.class))).thenReturn(new Ingredient());
+        doReturn(recipe).when(serviceSpy).save(any(Recipe.class));
+        Recipe result = serviceSpy.save(new RecipeDto());
 
         //then
-        assertNotNull(recipe);
-        assertEquals(recipe.getDifficulty(),result.getDifficulty());
+        assertNotNull(result);
+        assertEquals(recipe,result);
 
-        verify(recipeDtoToRecipe).convert(any(RecipeDto.class));
-        verify(repository,times(2)).save(any(Recipe.class));
+
+        verify(recipeDtoToRecipe).convert(any());
+        verify(noteService).save(any(Note.class));
+        verify(uomService,times(2)).save(any(UnitOfMeasure.class));
+        verify(ingredientService,times(2)).save(any(Ingredient.class));
+        verify(serviceSpy,times(2)).save(any(Recipe.class));
 
     }
 

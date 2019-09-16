@@ -6,6 +6,8 @@ import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UomServiceImpl implements UomService {
 
@@ -24,9 +26,25 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
+    public Optional<UnitOfMeasure> findByUom(String uom) {
+        return uomRepository.findByUom(uom);
+    }
+
+    @Override
+    public UnitOfMeasure save(UnitOfMeasure unitOfMeasure) {
+
+        Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasure.getUom());
+
+        return optionalUnitOfMeasure.orElseGet(() -> uomRepository.save(unitOfMeasure));
+
+    }
+
+    @Override
     public UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto) {
 
-        return uomRepository.save(converter.convert(unitOfMeasureDto));
+        Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasureDto.getUom());
+
+        return optionalUnitOfMeasure.orElse(uomRepository.save(converter.convert(unitOfMeasureDto)));
     }
 
     @Override

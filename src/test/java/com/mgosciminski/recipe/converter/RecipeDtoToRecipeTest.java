@@ -1,12 +1,10 @@
 package com.mgosciminski.recipe.converter;
 
-import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.domain.Ingredient;
-import com.mgosciminski.recipe.domain.Note;
-import com.mgosciminski.recipe.domain.Recipe;
+import com.mgosciminski.recipe.domain.*;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.model.RecipeDto;
+import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,6 +27,8 @@ public class RecipeDtoToRecipeTest {
     IngredientDtoToIngredient ingredientDtoToIngredient;
     @Mock
     CategoryDtoToCategory categoryDtoToCategory;
+    @Mock
+    UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure;
 
     @InjectMocks
     RecipeDtoToRecipe recipeDtoToRecipe;
@@ -52,8 +52,13 @@ public class RecipeDtoToRecipeTest {
         recipeDto.setDescription("desc");
         recipeDto.setDifficulty("EASY");
         Set<IngredientDto> ingredientDtos = new HashSet<>();
-        ingredientDtos.add(new IngredientDto());
-        ingredientDtos.add(new IngredientDto());
+        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
+        IngredientDto ingredientDto = new IngredientDto();
+        ingredientDto.setUnitOfMeasureDto(unitOfMeasureDto);
+        IngredientDto ingredientDto1 = new IngredientDto();
+        ingredientDto1.setUnitOfMeasureDto(unitOfMeasureDto);
+        ingredientDtos.add(ingredientDto);
+        ingredientDtos.add(ingredientDto1);
         recipeDto.setIngredientDtos(ingredientDtos);
         Set<CategoryDto> categoryDtos = new HashSet<>();
         categoryDtos.add(new CategoryDto());
@@ -63,6 +68,7 @@ public class RecipeDtoToRecipeTest {
         //when
         when(noteDtoToNote.convert(any())).thenReturn(new Note());
         when(ingredientDtoToIngredient.convert(any())).thenReturn(new Ingredient());
+        when(uomDtoToUnitOfMeasure.convert(any())).thenReturn(new UnitOfMeasure());
         when(categoryDtoToCategory.convert(any())).thenReturn(new Category());
         Recipe result = recipeDtoToRecipe.convert(recipeDto);
 
@@ -72,6 +78,7 @@ public class RecipeDtoToRecipeTest {
 
         verify(noteDtoToNote).convert(any());
         verify(ingredientDtoToIngredient,times(2)).convert(any());
+        verify(uomDtoToUnitOfMeasure,times(2)).convert(any());
         verify(categoryDtoToCategory,times(2)).convert(any());
     }
 }

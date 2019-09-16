@@ -1,17 +1,23 @@
 package com.mgosciminski.recipe.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.NaturalId;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
 public class UnitOfMeasure{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String uom;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "unitOfMeasure")
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -27,5 +33,26 @@ public class UnitOfMeasure{
 
     public void setUom(String uom) {
         this.uom = uom;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UnitOfMeasure)) return false;
+        UnitOfMeasure that = (UnitOfMeasure) o;
+        return Objects.equals(uom, that.uom);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uom);
     }
 }

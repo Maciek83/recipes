@@ -41,8 +41,12 @@ public class NoteServiceImplTest {
     @Before
     public void setup()
     {
-        notes.add(new Note());
-        notes.add(new Note());
+        Note note = new Note();
+        note.setNotes("n");
+        notes.add(note);
+        Note note1 = new Note();
+        note1.setNotes("n2");
+        notes.add(note1);
 
         noteServiceSpy = Mockito.spy(noteService);
     }

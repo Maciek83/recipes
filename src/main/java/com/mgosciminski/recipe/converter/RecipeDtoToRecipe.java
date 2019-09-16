@@ -1,9 +1,6 @@
 package com.mgosciminski.recipe.converter;
 
-import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.domain.Difficulty;
-import com.mgosciminski.recipe.domain.Ingredient;
-import com.mgosciminski.recipe.domain.Recipe;
+import com.mgosciminski.recipe.domain.*;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.model.RecipeDto;
@@ -20,11 +17,16 @@ public class RecipeDtoToRecipe implements Converter<RecipeDto,Recipe> {
     private final NoteDtoToNote noteDtoToNote;
     private final IngredientDtoToIngredient ingredientDtoToIngredient;
     private final CategoryDtoToCategory categoryDtoToCategory;
+    private final UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure;
 
-    public RecipeDtoToRecipe(NoteDtoToNote noteDtoToNote, IngredientDtoToIngredient ingredientDtoToIngredient, CategoryDtoToCategory categoryDtoToCategory) {
+
+    public RecipeDtoToRecipe(NoteDtoToNote noteDtoToNote,
+                             IngredientDtoToIngredient ingredientDtoToIngredient,
+                             CategoryDtoToCategory categoryDtoToCategory, UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure) {
         this.noteDtoToNote = noteDtoToNote;
         this.ingredientDtoToIngredient = ingredientDtoToIngredient;
         this.categoryDtoToCategory = categoryDtoToCategory;
+        this.uomDtoToUnitOfMeasure = uomDtoToUnitOfMeasure;
     }
 
     @Nullable
@@ -50,7 +52,12 @@ public class RecipeDtoToRecipe implements Converter<RecipeDto,Recipe> {
         Set<IngredientDto> ingredientDtos = recipeDto.getIngredientDtos();
         Set<Ingredient> ingredients = new HashSet<>();
         ingredientDtos.forEach(ingredientDto ->
-        { ingredients.add(ingredientDtoToIngredient.convert(ingredientDto));});
+        {
+            Ingredient ingredient = ingredientDtoToIngredient.convert(ingredientDto);
+            UnitOfMeasure unitOfMeasure = uomDtoToUnitOfMeasure.convert(ingredientDto.getUnitOfMeasureDto());
+            ingredient.setUnitOfMeasure(unitOfMeasure);
+            ingredients.add(ingredient);
+        });
 
         recipe.setIngredients(ingredients);
 

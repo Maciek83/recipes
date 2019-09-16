@@ -40,14 +40,17 @@ public class CategoryServiceImplTest {
     @Before
     public void setup()
     {
-        categories.add(new Category());
+        Category category = new Category();
+        category.setName("name");
+        categories.add(category);
         categories.add(new Category());
 
         categoryServiceSpy = Mockito.spy(categoryService);
     }
 
     @Test
-    public void findAll() {
+    public void findAll() throws Exception
+    {
 
         //when
         when(categoryRepository.findAll()).thenReturn(categories);
@@ -59,7 +62,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    public void findByIdNull()
+    public void findByIdNull() throws Exception
     {
         //given
         Optional<Category> optionalCategory = Optional.empty();
@@ -76,7 +79,8 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    public void findById() {
+    public void findById() throws Exception
+    {
 
         //given
         Optional<Category> optionalCategory = Optional.of(new Category());
@@ -93,24 +97,50 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    public void saveCategoryDto()
+    public void saveCategoryDtoIsInDatabase() throws Exception
     {
         //given
         Category category = new Category();
+        category.setName("name");
+        Optional<Category> categoryOptional = Optional.of(category) ;
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName("x");
 
         //when
+        doReturn(categoryOptional).when(categoryServiceSpy).findByName(anyString());
+        Category result = categoryServiceSpy.save(categoryDto);
+
+        //then
+        assertNotNull(result);
+        assertEquals(result.getName(),category.getName());
+        verify(categoryServiceSpy).findByName(anyString());
+        verifyZeroInteractions(categoryRepository);
+    }
+
+    @Test
+    public void saveCategoryDtoNoExistInDB() throws Exception
+    {
+        //given
+        Category category = new Category();
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName("xx");
+        Optional<Category> optionalCategory = Optional.empty();
+
+        //when
+        doReturn(optionalCategory).when(categoryServiceSpy).findByName(anyString());
         when(categoryRepository.save(any())).thenReturn(category);
-        Category result = categoryService.save(new CategoryDto());
+        Category result = categoryServiceSpy.save(categoryDto);
 
         //then
         assertNotNull(result);
         assertEquals(category,result);
 
+        verify(categoryServiceSpy).findByName(anyString());
         verify(categoryRepository).save(any());
     }
 
     @Test
-    public void saveCategory()
+    public void saveCategory() throws Exception
     {
         //given
         Category category = new Category();
@@ -127,40 +157,74 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    public void edit()
+    public void edit() throws Exception
     {
         //given
         Category category = new Category();
         category.setName("name");
 
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setId(1L);
+        categoryDto.setName("newName");
+
         //when
         doReturn(category).when(categoryServiceSpy).findById(anyLong());
-        Category result = categoryServiceSpy.findById(1L);
-        result.setName("newName");
-        doReturn(result).when(categoryServiceSpy).save(any(Category.class));
-        Category savedInDataBase = categoryServiceSpy.save(result);
+        doReturn(category).when(categoryServiceSpy).save(any(Category.class));
+        Category savedInDataBase = categoryServiceSpy.edit(categoryDto);
+
 
         //then
         assertNotNull(savedInDataBase);
-        assertEquals(category,result);
-        assertEquals(result,savedInDataBase);
-        assertEquals(savedInDataBase.getName(),"newName");
+        assertEquals(category,savedInDataBase);
 
         verify(categoryServiceSpy).findById(anyLong());
         verify(categoryServiceSpy).save(any(Category.class));
     }
 
     @Test
-    public void delete() {
+    public void delete() throws Exception
+    {
         categoryService.delete(new Category());
 
         verify(categoryRepository).delete(any());
     }
 
     @Test
-    public void deleteById() {
+    public void deleteById() throws Exception
+    {
         categoryService.deleteById(1L);
 
         verify(categoryRepository).deleteById(anyLong());
+    }
+
+    @Test
+    public void findByName() throws Exception
+    {
+        //given
+        Optional<Category> categoryOptional = Optional.of(new Category());
+
+        //when
+        when(categoryRepository.findByName(anyString())).thenReturn(categoryOptional);
+        Optional<Category> result = categoryService.findByName("x");
+
+        //then
+        assertNotEquals(result, Optional.empty());
+        verify(categoryRepository).findByName(anyString());
+
+    }
+
+    @Test
+    public void findByNameNull() throws Exception
+    {
+        //given
+        Optional<Category> optionalCategory = Optional.empty();
+
+        //when
+        when(categoryRepository.findByName(anyString())).thenReturn(optionalCategory);
+        Optional<Category> result = categoryService.findByName("x");
+
+        //then
+        assertEquals(result,Optional.empty());
+        verify(categoryRepository).findByName(anyString());
     }
 }

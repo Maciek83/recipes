@@ -50,7 +50,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(CategoryDto categoryDto) {
-        return categoryRepository.save(categoryDtoToCategory.convert(categoryDto));
+
+        Optional<Category> optionalCategory = findByName(categoryDto.getName());
+
+        return optionalCategory.orElseGet(() -> categoryRepository.save(categoryDtoToCategory.convert(categoryDto))) ;
     }
 
     @Override
@@ -68,5 +71,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Category> findByName(String name) {
+        return categoryRepository.findByName(name);
     }
 }

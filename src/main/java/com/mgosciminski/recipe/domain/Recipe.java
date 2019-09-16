@@ -1,7 +1,10 @@
 package com.mgosciminski.recipe.domain;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -24,7 +27,8 @@ public class Recipe{
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "recipe")
     private Note notes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -129,5 +133,25 @@ public class Recipe{
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Recipe)) return false;
+        Recipe recipe = (Recipe) o;
+        return Objects.equals(description, recipe.description) &&
+                Objects.equals(prepTime, recipe.prepTime) &&
+                Objects.equals(cookTime, recipe.cookTime) &&
+                Objects.equals(servings, recipe.servings) &&
+                Objects.equals(source, recipe.source) &&
+                Objects.equals(url, recipe.url) &&
+                Objects.equals(directions, recipe.directions) &&
+                difficulty == recipe.difficulty;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, prepTime, cookTime, servings, source, url, directions, difficulty);
     }
 }

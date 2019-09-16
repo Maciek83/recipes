@@ -9,9 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -28,6 +30,8 @@ public class UomServiceImplTest {
     @InjectMocks
     private UomServiceImpl uomService;
 
+    private UomServiceImpl uomServiceSpy;
+
 
     private Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
 
@@ -35,6 +39,41 @@ public class UomServiceImplTest {
     public void setUp() throws Exception {
         unitOfMeasures.add(new UnitOfMeasure());
         unitOfMeasures.add(new UnitOfMeasure());
+
+        uomServiceSpy = Mockito.spy(uomService);
+    }
+
+    @Test
+    public void findByUom() throws Exception
+    {
+        //given
+        Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.of(new UnitOfMeasure());
+
+        //when
+        when(uomRepository.findByUom(anyString())).thenReturn(unitOfMeasureOptional);
+        Optional<UnitOfMeasure> unitOfMeasure = uomService.findByUom("aa");
+
+        //then
+        assertNotNull(unitOfMeasure);
+        assertEquals(unitOfMeasureOptional,unitOfMeasure);
+
+        verify(uomRepository).findByUom(anyString());
+    }
+
+    @Test
+    public void findByUomEmpty() throws Exception
+    {
+        //given
+        Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.empty();
+
+        //when
+        when(uomRepository.findByUom(anyString())).thenReturn(unitOfMeasureOptional);
+        Optional<UnitOfMeasure> unitOfMeasure = uomService.findByUom("aa");
+
+        //then
+        assertEquals(unitOfMeasure,Optional.empty());
+
+        verify(uomRepository).findByUom(anyString());
     }
 
     @Test
@@ -52,22 +91,41 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void save() throws Exception
+    public void saveWhenExist() throws Exception
+    {
+        //given
+        Optional<UnitOfMeasure> unitOfMeasure = Optional.of(new UnitOfMeasure());
+
+        //when
+        doReturn(unitOfMeasure).when(uomServiceSpy).findByUom(anyString());
+        Optional<UnitOfMeasure> result = uomServiceSpy.findByUom("aa");
+
+        //then
+        assertEquals(unitOfMeasure,result);
+
+        verifyZeroInteractions(uomRepository);
+    }
+
+    @Test
+    public void saveWhenDontExist() throws Exception
     {
 
         //given
         UnitOfMeasureDto ofMeasureDto = new UnitOfMeasureDto();
+        ofMeasureDto.setUom("aa");
         UnitOfMeasure ofMeasureToSave = new UnitOfMeasure();
 
         //when
+        doReturn(Optional.empty()).when(uomServiceSpy).findByUom(anyString());
         when(uomRepository.save(any())).thenReturn(ofMeasureToSave);
 
-        UnitOfMeasure returned = uomService.save(ofMeasureDto);
+        UnitOfMeasure returned = uomServiceSpy.save(ofMeasureDto);
 
         //then
         assertNotNull(returned);
         assertEquals(returned,ofMeasureToSave);
 
+        verify(uomServiceSpy).findByUom(anyString());
         verify(uomRepository).save(any());
     }
 

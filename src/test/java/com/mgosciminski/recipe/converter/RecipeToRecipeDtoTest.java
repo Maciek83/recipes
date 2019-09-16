@@ -59,11 +59,15 @@ public class RecipeToRecipeDtoTest {
         recipe.setDifficulty(Difficulty.MODERATE);
         recipe.setNotes(new Note());
         Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(new Ingredient());
+        Ingredient ingredient = new Ingredient();
+        ingredient.setDescription("d");
+        ingredients.add(ingredient);
         ingredients.add(new Ingredient());
         recipe.setIngredients(ingredients);
         Set<Category> categories = new HashSet<>();
-        categories.add(new Category());
+        Category category = new Category();
+        category.setName("n");
+        categories.add(category);
         categories.add(new Category());
         recipe.setCategories(categories);
 

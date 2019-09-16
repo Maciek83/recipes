@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Note{
@@ -36,5 +37,18 @@ public class Note{
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Note)) return false;
+        Note note = (Note) o;
+        return Objects.equals(notes, note.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notes);
     }
 }

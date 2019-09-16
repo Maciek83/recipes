@@ -2,6 +2,7 @@ package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Ingredient{
@@ -14,7 +15,7 @@ public class Ingredient{
     @ManyToOne(fetch = FetchType.LAZY)
     private Recipe recipe;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private UnitOfMeasure unitOfMeasure;
 
     public Long getId() {
@@ -55,5 +56,19 @@ public class Ingredient{
 
     public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
         this.unitOfMeasure = unitOfMeasure;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ingredient)) return false;
+        Ingredient that = (Ingredient) o;
+        return Objects.equals(description, that.description) &&
+                Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, amount);
     }
 }
