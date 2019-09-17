@@ -36,7 +36,6 @@ public class UomServiceImpl implements UomService {
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasure.getUom());
 
         return optionalUnitOfMeasure.orElseGet(() -> uomRepository.save(unitOfMeasure));
-
     }
 
     @Override
@@ -44,7 +43,7 @@ public class UomServiceImpl implements UomService {
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasureDto.getUom());
 
-        return optionalUnitOfMeasure.orElse(uomRepository.save(converter.convert(unitOfMeasureDto)));
+        return optionalUnitOfMeasure.orElseGet(() -> uomRepository.save(converter.convert(unitOfMeasureDto)));
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.mgosciminski.recipe.model;
 
+import javax.validation.constraints.NotNull;
+
 public class CategoryDto {
 
     private Long id;
+    @NotNull
     private String name;
 
     public Long getId() {

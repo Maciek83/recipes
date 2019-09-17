@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--/*@thymesVar id="uom" type="com.mgosciminski.recipe.model.UnitOfMeasureDto"*/-->
+<form th:object="${uom}" th:action="@{/uom/new/}" method="post">
+    <label>
+        <input type="text" th:field="*{uom}"/>
+    </label>
+    <button type="submit">Submit</button>
+    <div th:if="${#fields.hasErrors('*')}">
+        <p>Please Correct Errors Below</p>
+        <span th:if="${#fields.hasErrors('uom')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('uom')}" th:text="${err}"></li>
+            </ul>
+        </span>
+    </div>
+</form>
+</body>
+</html>
