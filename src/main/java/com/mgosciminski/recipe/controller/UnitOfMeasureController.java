@@ -2,13 +2,12 @@ package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -32,6 +31,7 @@ public class UnitOfMeasureController {
     }
 
     @GetMapping("/new")
+    @ResponseStatus(HttpStatus.OK)
     public String showForm(Model model)
     {
         model.addAttribute("uom", new UnitOfMeasureDto());
@@ -40,19 +40,17 @@ public class UnitOfMeasureController {
     }
 
     @PostMapping("/new")
-    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, BindingResult bindingResult)
+    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
+    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, ModelAndView model, BindingResult bindingResult)
     {
         if(bindingResult.hasErrors())
         {
-            bindingResult.getAllErrors().forEach(System.out::println);
+            model.setStatus(HttpStatus.NOT_ACCEPTABLE);
             return UOM_FORM;
         }
 
         uomService.save(unitOfMeasureDto);
         return "redirect:/uom";
-
-
-
     }
 
 }

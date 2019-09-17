@@ -28,7 +28,7 @@ public class Recipe{
     private Note notes;
 
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "recipe")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST)
