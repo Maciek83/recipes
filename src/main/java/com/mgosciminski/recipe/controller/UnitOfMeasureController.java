@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -23,6 +23,7 @@ public class UnitOfMeasureController {
     public UnitOfMeasureController(UomService uomService) {
         this.uomService = uomService;
     }
+
 
     @GetMapping
     public String showUom(Model model)
@@ -47,7 +48,7 @@ public class UnitOfMeasureController {
         Optional<UnitOfMeasure> unitOfMeasureOptional = uomService.findById(Long.valueOf(id));
 
         if(unitOfMeasureOptional.isPresent()) {
-            UnitOfMeasureDto unitOfMeasureDto = uomService.convert(unitOfMeasureOptional.get());
+            UnitOfMeasureDto unitOfMeasureDto = uomService.convertToDto(unitOfMeasureOptional.get());
             model.addAttribute("uom", unitOfMeasureDto);
         }
         else

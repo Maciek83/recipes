@@ -110,7 +110,48 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
-    public void assNewUomEmptyData() throws Exception{
+    public void addNewUomIdNotNull()throws Exception
+    {
+        //given
+        when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
+        when(uomService.save(any(UnitOfMeasure.class))).thenReturn(new UnitOfMeasure());
+
+        //when
+        mockMvc.perform(post("/uom/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("uom","unit")
+                .param("id","1")
+                )
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name("redirect:/uom"));
+
+        //then
+        verify(uomService).findById(anyLong());
+        verify(uomService).save(any(UnitOfMeasure.class));
+    }
+
+    @Test
+    public void addNewUomIdNotNullByOptionalNull()throws Exception
+    {
+        //given
+        when(uomService.findById(anyLong())).thenReturn(Optional.empty());
+
+        //when
+        mockMvc.perform(post("/uom/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("uom","unit")
+                .param("id","1")
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/uom"));
+
+        //then
+        verify(uomService).findById(anyLong());
+        verify(uomService,times(0)).save(any(UnitOfMeasure.class));
+    }
+
+    @Test
+    public void addNewUomEmptyData() throws Exception{
         mockMvc.perform(post("/uom/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("uom",""))
@@ -122,7 +163,7 @@ public class UnitOfMeasureControllerTest {
     {
         //given
         when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
-        when(uomService.convert(any())).thenReturn(new UnitOfMeasureDto());
+        when(uomService.convertToDto(any())).thenReturn(new UnitOfMeasureDto());
 
         //when
         mockMvc.perform(get("/uom/1/edit"))
@@ -132,7 +173,7 @@ public class UnitOfMeasureControllerTest {
 
         //then
         verify(uomService).findById(anyLong());
-        verify(uomService).convert(any());
+        verify(uomService).convertToDto(any());
     }
 
     @Test
@@ -151,7 +192,7 @@ public class UnitOfMeasureControllerTest {
 
         //then
         verify(uomService).findById(anyLong());
-        verify(uomService,times(0)).convert(any());
+        verify(uomService,times(0)).convertToDto(any());
     }
 
 }

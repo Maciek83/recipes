@@ -19,7 +19,8 @@ public class UomServiceImpl implements UomService {
     private UnitOfMeasure nullObject;
 
     public UomServiceImpl(UomRepository uomRepository,
-                          UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure, UnitOfMeasureToUomDto unitOfMeasureToUomDto) {
+                          UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure,
+                          UnitOfMeasureToUomDto unitOfMeasureToUomDto) {
         this.uomRepository = uomRepository;
         this.uomDtoToUnitOfMeasure = uomDtoToUnitOfMeasure;
         this.unitOfMeasureToUomDto = unitOfMeasureToUomDto;
@@ -88,7 +89,7 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
-    public UnitOfMeasureDto convert(UnitOfMeasure unitOfMeasure) {
+    public UnitOfMeasureDto convertToDto(UnitOfMeasure unitOfMeasure) {
         return unitOfMeasureToUomDto.convert(unitOfMeasure);
     }
 

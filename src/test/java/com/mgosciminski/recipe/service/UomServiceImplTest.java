@@ -1,5 +1,6 @@
 package com.mgosciminski.recipe.service;
 
+import com.mgosciminski.recipe.converter.UnitOfMeasureToUomDto;
 import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
@@ -25,7 +26,9 @@ public class UomServiceImplTest {
     @Mock
     private UomRepository uomRepository;
     @Mock
-    private UomDtoToUnitOfMeasure converter;
+    private UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure;
+    @Mock
+    private UnitOfMeasureToUomDto unitOfMeasureToUomDto;
 
     @InjectMocks
     private UomServiceImpl uomService;
@@ -147,5 +150,81 @@ public class UomServiceImplTest {
 
         //then
         verify(uomRepository,times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void findById() throws Exception
+    {
+        //given
+        Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.of(new UnitOfMeasure());
+        when(uomRepository.findById(anyLong())).thenReturn(unitOfMeasureOptional);
+
+        //when
+        Optional<UnitOfMeasure> result = uomService.findById(1L);
+
+        //then
+        assertNotNull(result);
+        assertEquals(result,unitOfMeasureOptional);
+    }
+
+    @Test
+    public void convertToDto() throws Exception
+    {
+        //given
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        unitOfMeasure.setId(1L);
+        unitOfMeasure.setUom("item");
+        when(unitOfMeasureToUomDto.convert(any())).thenReturn(new UnitOfMeasureDto());
+
+        //when
+        UnitOfMeasureDto result = uomService.convertToDto(unitOfMeasure);
+
+        //then
+        assertNotNull(result);
+
+        verify(unitOfMeasureToUomDto).convert(any());
+
+    }
+
+    @Test
+    public void editPresent() throws Exception
+    {
+        //given
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        unitOfMeasure.setId(1L);
+        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
+        unitOfMeasureDto.setId(1L);
+        doReturn(Optional.of(unitOfMeasure)).when(uomServiceSpy).findById(anyLong());
+        doReturn(unitOfMeasure).when(uomServiceSpy).save(any(UnitOfMeasure.class));
+
+        //when
+        UnitOfMeasure result = uomServiceSpy.edit(unitOfMeasureDto);
+
+        //then
+        assertNotNull(result);
+        assertEquals(result,unitOfMeasure);
+
+        verify(uomServiceSpy).findById(anyLong());
+        verify(uomServiceSpy).save(any(UnitOfMeasure.class));
+    }
+
+    @Test
+    public void editNotPresent() throws Exception
+    {
+        //given
+        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
+        unitOfMeasureDto.setId(1L);
+        doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
+
+        //when
+        UnitOfMeasure result = uomServiceSpy.edit(unitOfMeasureDto);
+
+        //then
+        assertNotNull(result);
+        assertEquals(result.getUom(),"bad");
+
+
+        verify(uomServiceSpy).findById(anyLong());
+        verify(uomServiceSpy,times(0)).save(any(UnitOfMeasure.class));
     }
 }
