@@ -31,6 +31,11 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
+    public Optional<UnitOfMeasure> findById(Long id) {
+        return uomRepository.findById(id);
+    }
+
+    @Override
     public UnitOfMeasure save(UnitOfMeasure unitOfMeasure) {
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasure.getUom());
@@ -40,6 +45,7 @@ public class UomServiceImpl implements UomService {
 
     @Override
     public UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto) {
+
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasureDto.getUom());
 

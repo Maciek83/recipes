@@ -115,7 +115,7 @@ public class UnitOfMeasureControllerTest {
         mockMvc.perform(post("/uom/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("uom",""))
-            .andExpect(status().is4xxClientError());
+            .andExpect(status().isOk());
     }
 
 }

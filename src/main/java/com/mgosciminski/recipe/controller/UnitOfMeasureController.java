@@ -40,12 +40,10 @@ public class UnitOfMeasureController {
     }
 
     @PostMapping("/new")
-    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
-    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, ModelAndView model, BindingResult bindingResult)
+    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, BindingResult bindingResult)
     {
         if(bindingResult.hasErrors())
         {
-            model.setStatus(HttpStatus.NOT_ACCEPTABLE);
             return UOM_FORM;
         }
 

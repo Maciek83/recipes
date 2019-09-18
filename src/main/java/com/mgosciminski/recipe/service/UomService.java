@@ -9,6 +9,7 @@ public interface UomService {
 
     Iterable<UnitOfMeasure> findAll();
     Optional<UnitOfMeasure> findByUom(String uom);
+    Optional<UnitOfMeasure> findById(Long id);
     UnitOfMeasure save(UnitOfMeasure unitOfMeasure);
     UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto);
     void delete(UnitOfMeasure unitOfMeasure);
