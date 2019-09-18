@@ -1,6 +1,5 @@
 package com.mgosciminski.recipe.controller;
 
-import com.mgosciminski.recipe.converter.UnitOfMeasureToUomDto;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
@@ -17,17 +16,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 public class UnitOfMeasureControllerTest {
@@ -116,6 +115,43 @@ public class UnitOfMeasureControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("uom",""))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    public void editExisting() throws Exception
+    {
+        //given
+        when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
+        when(uomService.convert(any())).thenReturn(new UnitOfMeasureDto());
+
+        //when
+        mockMvc.perform(get("/uom/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(UOM_FORM))
+                .andExpect(model().attributeExists("uom"));
+
+        //then
+        verify(uomService).findById(anyLong());
+        verify(uomService).convert(any());
+    }
+
+    @Test
+    public void editNull() throws Exception
+    {
+        //given
+        when(uomService.findById(anyLong())).thenReturn(Optional.empty());
+
+        //when
+        mockMvc.perform(get("/uom/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(UOM_FORM))
+                .andExpect(model().attributeExists("uom"))
+                .andExpect(model().attribute("uom",hasProperty("uom",is("imBad"))));
+
+
+        //then
+        verify(uomService).findById(anyLong());
+        verify(uomService,times(0)).convert(any());
     }
 
 }

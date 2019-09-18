@@ -44,8 +44,18 @@ public class UnitOfMeasureController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable String id,Model model)
     {
-        UnitOfMeasureDto unitOfMeasureDto = uomService.convert(uomService.findById(Long.valueOf(id)).get());
-        model.addAttribute("uom", unitOfMeasureDto);
+        Optional<UnitOfMeasure> unitOfMeasureOptional = uomService.findById(Long.valueOf(id));
+
+        if(unitOfMeasureOptional.isPresent()) {
+            UnitOfMeasureDto unitOfMeasureDto = uomService.convert(unitOfMeasureOptional.get());
+            model.addAttribute("uom", unitOfMeasureDto);
+        }
+        else
+        {
+            UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
+            unitOfMeasureDto.setUom("imBad");
+            model.addAttribute("uom",unitOfMeasureDto);
+        }
         return UOM_FORM;
     }
 
