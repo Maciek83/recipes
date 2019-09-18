@@ -19,6 +19,7 @@ public class UomDtoToUnitOfMeasure implements Converter<UnitOfMeasureDto, UnitOf
 
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setUom(unitOfMeasureDto.getUom());
+        unitOfMeasure.setId(unitOfMeasureDto.getId());
 
         return unitOfMeasure;
 

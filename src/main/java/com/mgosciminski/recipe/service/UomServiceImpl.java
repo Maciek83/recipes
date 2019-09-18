@@ -1,5 +1,6 @@
 package com.mgosciminski.recipe.service;
 
+import com.mgosciminski.recipe.converter.UnitOfMeasureToUomDto;
 import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
@@ -12,12 +13,16 @@ import java.util.Optional;
 public class UomServiceImpl implements UomService {
 
     private final UomRepository uomRepository;
-    private final UomDtoToUnitOfMeasure converter;
+    private final UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure;
+    private final UnitOfMeasureToUomDto unitOfMeasureToUomDto;
+
+    private UnitOfMeasure nullObject;
 
     public UomServiceImpl(UomRepository uomRepository,
-                          UomDtoToUnitOfMeasure converter) {
+                          UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure, UnitOfMeasureToUomDto unitOfMeasureToUomDto) {
         this.uomRepository = uomRepository;
-        this.converter = converter;
+        this.uomDtoToUnitOfMeasure = uomDtoToUnitOfMeasure;
+        this.unitOfMeasureToUomDto = unitOfMeasureToUomDto;
     }
 
     @Override
@@ -46,10 +51,9 @@ public class UomServiceImpl implements UomService {
     @Override
     public UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto) {
 
-
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findByUom(unitOfMeasureDto.getUom());
 
-        return optionalUnitOfMeasure.orElseGet(() -> uomRepository.save(converter.convert(unitOfMeasureDto)));
+        return optionalUnitOfMeasure.orElseGet(() -> uomRepository.save(uomDtoToUnitOfMeasure.convert(unitOfMeasureDto)));
     }
 
     @Override
@@ -60,6 +64,32 @@ public class UomServiceImpl implements UomService {
     @Override
     public void delete(Long id) {
         uomRepository.deleteById(id);
+    }
+
+    @Override
+    public UnitOfMeasure edit(UnitOfMeasureDto unitOfMeasureDto) {
+
+        Optional<UnitOfMeasure> optionalUnitOfMeasure = findById(unitOfMeasureDto.getId());
+
+        if(optionalUnitOfMeasure.isPresent())
+        {
+            UnitOfMeasure unitOfMeasure = optionalUnitOfMeasure.get();
+            unitOfMeasure.setUom(unitOfMeasure.getUom());
+            return save(unitOfMeasure);
+        }
+        else
+        {
+            nullObject = new UnitOfMeasure();
+            nullObject.setUom("bad");
+            nullObject.setId(-1L);
+
+            return nullObject;
+        }
+    }
+
+    @Override
+    public UnitOfMeasureDto convert(UnitOfMeasure unitOfMeasure) {
+        return unitOfMeasureToUomDto.convert(unitOfMeasure);
     }
 
 }

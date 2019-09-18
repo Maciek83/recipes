@@ -8,6 +8,7 @@
 <!--/*@thymesVar id="uom" type="com.mgosciminski.recipe.model.UnitOfMeasureDto"*/-->
 <form th:object="${uom}" th:action="@{/uom/new/}" method="post">
     <label>
+        <input type="hidden" th:field="*{id}">
         <input type="text" th:field="*{uom}"/>
     </label>
     <button type="submit">Submit</button>

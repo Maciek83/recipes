@@ -14,5 +14,7 @@ public interface UomService {
     UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto);
     void delete(UnitOfMeasure unitOfMeasure);
     void delete(Long id);
+    UnitOfMeasure edit(UnitOfMeasureDto unitOfMeasureDto);
+    UnitOfMeasureDto convert(UnitOfMeasure unitOfMeasure);
 
 }

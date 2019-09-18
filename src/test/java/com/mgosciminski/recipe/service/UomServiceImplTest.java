@@ -79,8 +79,10 @@ public class UomServiceImplTest {
     @Test
     public void findAll() throws Exception
     {
-        //when
+        //given
         when(uomRepository.findAll()).thenReturn(unitOfMeasures);
+
+        //when
         Iterable<UnitOfMeasure> result = uomService.findAll();
 
         //then
@@ -95,9 +97,9 @@ public class UomServiceImplTest {
     {
         //given
         Optional<UnitOfMeasure> unitOfMeasure = Optional.of(new UnitOfMeasure());
+        doReturn(unitOfMeasure).when(uomServiceSpy).findByUom(anyString());
 
         //when
-        doReturn(unitOfMeasure).when(uomServiceSpy).findByUom(anyString());
         Optional<UnitOfMeasure> result = uomServiceSpy.findByUom("aa");
 
         //then

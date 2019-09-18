@@ -1,5 +1,6 @@
 package com.mgosciminski.recipe.controller;
 
+import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/uom")
@@ -39,7 +41,15 @@ public class UnitOfMeasureController {
         return UOM_FORM;
     }
 
-    @PostMapping("/new")
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable String id,Model model)
+    {
+        UnitOfMeasureDto unitOfMeasureDto = uomService.convert(uomService.findById(Long.valueOf(id)).get());
+        model.addAttribute("uom", unitOfMeasureDto);
+        return UOM_FORM;
+    }
+
+    @PostMapping({"/new"})
     public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, BindingResult bindingResult)
     {
         if(bindingResult.hasErrors())
@@ -47,7 +57,22 @@ public class UnitOfMeasureController {
             return UOM_FORM;
         }
 
-        uomService.save(unitOfMeasureDto);
+        if(unitOfMeasureDto.getId() == null)
+        {
+            uomService.save(unitOfMeasureDto);
+        }
+        else
+        {
+            Optional<UnitOfMeasure> unitOfMeasureOptional = uomService.findById(unitOfMeasureDto.getId());
+
+            if(unitOfMeasureOptional.isPresent()) {
+                UnitOfMeasure u = unitOfMeasureOptional.get();
+                u.setUom(unitOfMeasureDto.getUom());
+                uomService.save(u);
+            }
+        }
+
+
         return "redirect:/uom";
     }
 
