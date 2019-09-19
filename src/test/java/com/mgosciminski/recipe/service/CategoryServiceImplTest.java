@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.converter.CategoryDtoToCategory;
+import com.mgosciminski.recipe.converter.CategoryToCategoryDto;
 import com.mgosciminski.recipe.domain.Category;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.repository.CategoryRepository;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,6 +30,8 @@ public class CategoryServiceImplTest {
     CategoryRepository categoryRepository;
     @Mock
     CategoryDtoToCategory categoryDtoToCategory;
+    @Mock
+    CategoryToCategoryDto categoryToCategoryDto;
 
     @InjectMocks
     CategoryServiceImpl categoryService;
@@ -51,31 +55,18 @@ public class CategoryServiceImplTest {
     @Test
     public void findAll() throws Exception
     {
+        //given
+        when(categoryRepository.findAll()).thenReturn(categories);
+        doReturn(new CategoryDto()).when(categoryServiceSpy).convertCategoryToCategoryDto(any(Category.class));
 
         //when
-        when(categoryRepository.findAll()).thenReturn(categories);
-        Set<Category> result = (Set<Category>) categoryService.findAll();
+        List<CategoryDto> result = (List<CategoryDto>) categoryServiceSpy.findAll();
+
         //then
         assertNotNull(result);
         assertEquals(result.size(),2);
+        verify(categoryServiceSpy,times(2)).convertCategoryToCategoryDto(any(Category.class));
         verify(categoryRepository).findAll();
-    }
-
-    @Test
-    public void findByIdNull() throws Exception
-    {
-        //given
-        Optional<Category> optionalCategory = Optional.empty();
-
-        //when
-        when(categoryRepository.findById(anyLong())).thenReturn(optionalCategory);
-        Category result = categoryService.findById(1L);
-
-        //then
-        assertNotNull(result);
-        assertEquals(result.getName(),BAD);
-
-        verify(categoryRepository).findById(anyLong());
     }
 
     @Test
@@ -87,11 +78,11 @@ public class CategoryServiceImplTest {
 
         //when
         when(categoryRepository.findById(anyLong())).thenReturn(optionalCategory);
-        Category result = categoryService.findById(1L);
+        Optional<Category> result = categoryService.findById(1L);
 
         //then
         assertNotNull(result);
-        assertEquals(optionalCategory.get(),result);
+        assertEquals(optionalCategory.get(),result.get());
 
         verify(categoryRepository).findById(anyLong());
     }
@@ -157,28 +148,43 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    public void edit() throws Exception
+    public void editPresent() throws Exception
     {
         //given
-        Category category = new Category();
-        category.setName("name");
-
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setId(1L);
-        categoryDto.setName("newName");
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("cat");
+        doReturn(Optional.of(category)).when(categoryServiceSpy).findById(anyLong());
+        doReturn(category).when(categoryServiceSpy).save(any(Category.class));
 
         //when
-        doReturn(category).when(categoryServiceSpy).findById(anyLong());
-        doReturn(category).when(categoryServiceSpy).save(any(Category.class));
-        Category savedInDataBase = categoryServiceSpy.edit(categoryDto);
-
+        Category result = categoryServiceSpy.edit(categoryDto);
 
         //then
-        assertNotNull(savedInDataBase);
-        assertEquals(category,savedInDataBase);
-
+        assertNotNull(result);
         verify(categoryServiceSpy).findById(anyLong());
         verify(categoryServiceSpy).save(any(Category.class));
+
+    }
+
+    @Test
+    public void editNotPresent() throws Exception
+    {
+        //given
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setId(1L);
+        doReturn(Optional.empty()).when(categoryServiceSpy).findById(anyLong());
+
+        //when
+        Category result = categoryServiceSpy.edit(categoryDto);
+
+        //then
+        assertNotNull(result);
+        assertEquals(result.getName(),"bad");
+        verify(categoryServiceSpy).findById(anyLong());
+        verify(categoryServiceSpy,times(0)).save(any(Category.class));
     }
 
     @Test
@@ -226,5 +232,19 @@ public class CategoryServiceImplTest {
         //then
         assertEquals(result,Optional.empty());
         verify(categoryRepository).findByName(anyString());
+    }
+
+    @Test
+    public void  convertCategoryToCategoryDtoTest() throws Exception
+    {
+        //given
+        when(categoryToCategoryDto.convert(any(Category.class))).thenReturn(any(CategoryDto.class));
+
+        //when
+        CategoryDto result = categoryService.convertCategoryToCategoryDto(new Category());
+
+        //then
+        verify(categoryToCategoryDto).convert(any(Category.class));
+
     }
 }

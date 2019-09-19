@@ -140,9 +140,11 @@ public class RecipeServiceImpl implements RecipeService {
 
         Set<CategoryDto> categoryDtos = recipeDto.getCategoryDtos();
         categoryDtos.forEach(categoryDto -> {
-            Category category = categoryService.findById(categoryDto.getId());
-            category.setName(categoryDto.getName());
-            categoryService.save(category);
+            Optional<Category> categoryOptional = categoryService.findById(categoryDto.getId());
+            if(categoryOptional.isPresent()) {
+                categoryOptional.get().setName(categoryDto.getName());
+                categoryService.save(categoryOptional.get());
+            }
         });
 
         return save(recipe);

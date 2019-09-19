@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,7 +42,14 @@ public class UomServiceImplTest {
     @Before
     public void setUp() throws Exception {
         unitOfMeasures.add(new UnitOfMeasure());
-        unitOfMeasures.add(new UnitOfMeasure());
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        unitOfMeasure.setUom("bobo");
+        unitOfMeasure.setId(1L);
+        UnitOfMeasure unitOfMeasure2 = new UnitOfMeasure();
+        unitOfMeasure.setUom("bobo2");
+        unitOfMeasure.setId(2L);
+        unitOfMeasures.add(unitOfMeasure);
+        unitOfMeasures.add(unitOfMeasure2);
 
         uomServiceSpy = Mockito.spy(uomService);
     }
@@ -84,15 +92,17 @@ public class UomServiceImplTest {
     {
         //given
         when(uomRepository.findAll()).thenReturn(unitOfMeasures);
+        doReturn(new UnitOfMeasureDto()).when(uomServiceSpy).convertToDto(any(UnitOfMeasure.class));
 
         //when
-        Iterable<UnitOfMeasure> result = uomService.findAll();
+        List<UnitOfMeasureDto> result = (List<UnitOfMeasureDto>) uomServiceSpy.findAll();
+
 
         //then
         assertNotNull(result);
-        assertEquals(result,unitOfMeasures);
-
+        assertEquals(result.size(),unitOfMeasures.size());
         verify(uomRepository,times(1)).findAll();
+        verify(uomServiceSpy,times(2)).convertToDto(any());
     }
 
     @Test

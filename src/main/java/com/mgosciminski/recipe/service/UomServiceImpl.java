@@ -7,7 +7,7 @@ import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UomServiceImpl implements UomService {
@@ -27,8 +27,10 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
-    public Iterable<UnitOfMeasure> findAll() {
-        return uomRepository.findAll();
+    public Iterable<UnitOfMeasureDto> findAll() {
+        List<UnitOfMeasureDto> unitOfMeasureDtos = new LinkedList<>();
+        uomRepository.findAll().forEach(unitOfMeasure -> unitOfMeasureDtos.add(convertToDto(unitOfMeasure)));
+        return unitOfMeasureDtos;
     }
 
     @Override

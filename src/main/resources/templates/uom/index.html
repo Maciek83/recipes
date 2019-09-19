@@ -15,7 +15,7 @@
     </tr>
     </thead>
     <tbody>
-    <!--/*@thymesVar id="uom" type="com.mgosciminski.recipe.domain.UnitOfMeasure"*/-->
+    <!--/*@thymesVar id="uom" type="com.mgosciminski.recipe.domain.UnitOfMeasureDto"*/-->
     <tr th:each="uom: ${uoms}">
         <td><a th:href="@{'/uom/'+${uom.id}+'/edit'}">Edit</a></td>
         <td th:text="${uom.uom}"></td>

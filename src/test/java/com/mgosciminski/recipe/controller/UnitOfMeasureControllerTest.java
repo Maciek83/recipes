@@ -63,26 +63,26 @@ public class UnitOfMeasureControllerTest {
     @Test
     public void showUom() throws Exception {
         //given
-        Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
-        unitOfMeasures.add(new UnitOfMeasure());
+        Set<UnitOfMeasureDto> unitOfMeasureDtos = new HashSet<>();
+        unitOfMeasureDtos.add(new UnitOfMeasureDto());
 
-        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
-        unitOfMeasure.setId(1L);
-        unitOfMeasure.setUom("kilos");
-        unitOfMeasures.add(unitOfMeasure);
+        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
+        unitOfMeasureDto.setId(1L);
+        unitOfMeasureDto.setUom("kilos");
+        unitOfMeasureDtos.add(unitOfMeasureDto);
 
         //when
-        when(uomService.findAll()).thenReturn(unitOfMeasures);
-        ArgumentCaptor<Set<UnitOfMeasure>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        when(uomService.findAll()).thenReturn(unitOfMeasureDtos);
+        ArgumentCaptor<Set<UnitOfMeasureDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
         String viewName = unitOfMeasureController.showUom(model);
 
         //then
         assertEquals(viewName, "uom/index");
         verify(uomService).findAll();
         verify(model).addAttribute(eq("uoms"), argumentCaptor.capture());
-        Set<UnitOfMeasure> unitOfMeasureSet = argumentCaptor.getValue();
-        assertEquals(2, unitOfMeasures.size());
-        assertEquals(unitOfMeasures, argumentCaptor.getValue());
+        Set<UnitOfMeasureDto> unitOfMeasureSet = argumentCaptor.getValue();
+        assertEquals(2, unitOfMeasureDtos.size());
+        assertEquals(unitOfMeasureDtos, argumentCaptor.getValue());
     }
 
     @Test

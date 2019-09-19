@@ -229,7 +229,7 @@ public class RecipeServiceImplTest {
         when(noteService.save(any(Note.class))).thenReturn(new Note());
         when(ingredientService.findById(anyLong())).thenReturn(new Ingredient());
         when(ingredientService.save(any(Ingredient.class))).thenReturn(new Ingredient());
-        when(categoryService.findById(anyLong())).thenReturn(new Category());
+        when(categoryService.findById(anyLong())).thenReturn(Optional.of(new Category()));
         doReturn(recipe).when(serviceSpy).save(any(Recipe.class));
 
         Recipe result = serviceSpy.edit(recipeDto);

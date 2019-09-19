@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UomService {
 
-    Iterable<UnitOfMeasure> findAll();
+    Iterable<UnitOfMeasureDto> findAll();
     Optional<UnitOfMeasure> findByUom(String uom);
     Optional<UnitOfMeasure> findById(Long id);
     UnitOfMeasure save(UnitOfMeasure unitOfMeasure);
