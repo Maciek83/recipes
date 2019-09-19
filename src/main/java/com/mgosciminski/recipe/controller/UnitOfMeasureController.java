@@ -82,7 +82,6 @@ public class UnitOfMeasureController {
             }
         }
 
-
         return "redirect:/uom";
     }
 

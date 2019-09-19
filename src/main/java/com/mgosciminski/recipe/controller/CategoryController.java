@@ -1,13 +1,16 @@
 package com.mgosciminski.recipe.controller;
 
+import com.mgosciminski.recipe.domain.Category;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/category")
@@ -28,7 +31,7 @@ public class CategoryController {
         return "category/index";
     }
 
-    @GetMapping("new")
+    @GetMapping("/new")
     @ResponseStatus(HttpStatus.OK)
     public String showForm(Model model)
     {
@@ -36,4 +39,54 @@ public class CategoryController {
 
         return CAT_FORM;
     }
+
+    @GetMapping("{id}/edit")
+    public String edit(@PathVariable String id,Model model)
+    {
+        Optional<Category> optionalCategory = categoryService.findById(Long.valueOf(id));
+
+        if(optionalCategory.isPresent())
+        {
+            CategoryDto categoryDto = categoryService.convertCategoryToCategoryDto(optionalCategory.get());
+            model.addAttribute("categories",categoryDto);
+        }
+        else
+        {
+            CategoryDto nullObj = new CategoryDto();
+            nullObj.setId(-1L);
+            nullObj.setName("imBad");
+        }
+
+        return CAT_FORM;
+    }
+
+    @PostMapping("/new")
+    public String addCategory(@Valid @ModelAttribute("categories") CategoryDto categoryDto, BindingResult bindingResult)
+    {
+
+        if(bindingResult.hasErrors())
+        {
+            return CAT_FORM;
+        }
+
+        if(categoryDto.getId() == null)
+        {
+            categoryService.save(categoryDto);
+        }
+        else
+        {
+            Optional<Category> optionalCategory = categoryService.findById(categoryDto.getId());
+
+            if(optionalCategory.isPresent())
+            {
+                Category category = optionalCategory.get();
+                category.setName(categoryDto.getName());
+                categoryService.save(category);
+            }
+        }
+
+        return "redirect:/category";
+    }
+
+
 }
