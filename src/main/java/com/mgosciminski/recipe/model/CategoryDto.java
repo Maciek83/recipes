@@ -7,7 +7,7 @@ public class CategoryDto {
 
     private Long id;
     @NotBlank
-    @Size(min= 3, max = 5)
+    @Size(min= 3, max = 255)
     private String name;
 
     public Long getId() {

@@ -35,7 +35,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public String showForm(Model model)
     {
-        model.addAttribute(new CategoryDto());
+        model.addAttribute("category", new CategoryDto());
 
         return CAT_FORM;
     }
@@ -48,20 +48,21 @@ public class CategoryController {
         if(optionalCategory.isPresent())
         {
             CategoryDto categoryDto = categoryService.convertCategoryToCategoryDto(optionalCategory.get());
-            model.addAttribute("categories",categoryDto);
+            model.addAttribute("category",categoryDto);
         }
         else
         {
             CategoryDto nullObj = new CategoryDto();
             nullObj.setId(-1L);
             nullObj.setName("imBad");
+            model.addAttribute("category",nullObj);
         }
 
         return CAT_FORM;
     }
 
     @PostMapping("/new")
-    public String addCategory(@Valid @ModelAttribute("categories") CategoryDto categoryDto, BindingResult bindingResult)
+    public String addCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult)
     {
 
         if(bindingResult.hasErrors())

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -101,7 +102,16 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
-    public void addNewUomOk() throws Exception {
+    public void addNewUomErrors() throws Exception
+    {
+        mockMvc.perform(post("/uom/new")
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(view().name(UOM_FORM));
+    }
+
+    @Test
+    public void addNewUomOkIdNull() throws Exception {
         mockMvc.perform(post("/uom/new")
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .param("uom","unit"))
@@ -131,7 +141,7 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
-    public void addNewUomIdNotNullByOptionalNull()throws Exception
+    public void addNewUomIdNotNullButOptionalNull()throws Exception
     {
         //given
         when(uomService.findById(anyLong())).thenReturn(Optional.empty());
