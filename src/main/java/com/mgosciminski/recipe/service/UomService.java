@@ -11,6 +11,7 @@ public interface UomService {
     Iterable<UnitOfMeasureDto> findAll();
     Optional<UnitOfMeasure> findByUom(String uom);
     Optional<UnitOfMeasure> findById(Long id);
+    UnitOfMeasure findByIdPresentOrException(Long id) throws NotFoundException;
     UnitOfMeasureDto findDtoById(Long id) throws NotFoundException;
     UnitOfMeasure save(UnitOfMeasure unitOfMeasure);
     UnitOfMeasure save(UnitOfMeasureDto unitOfMeasureDto);

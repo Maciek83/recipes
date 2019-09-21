@@ -62,25 +62,17 @@ public class UnitOfMeasureController {
         if (unitOfMeasureDto.getId() == null) {
             uomService.save(unitOfMeasureDto);
         } else {
-            Optional<UnitOfMeasure> unitOfMeasureOptional = uomService.findById(unitOfMeasureDto.getId());
-
-            if (unitOfMeasureOptional.isPresent()) {
-                UnitOfMeasure u = unitOfMeasureOptional.get();
-                u.setUom(unitOfMeasureDto.getUom());
-                uomService.save(u);
-            }
-            else {
-                throw new NotFoundException("can't find this id");
-            }
+            UnitOfMeasure unitOfMeasure = uomService.findByIdPresentOrException(unitOfMeasureDto.getId());
+            unitOfMeasure.setUom(unitOfMeasureDto.getUom());
+            uomService.save(unitOfMeasure);
         }
 
         return "redirect:/uom";
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleNotFound()
-    {
+    public ModelAndView handleNotFound() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Error404);
         return modelAndView;

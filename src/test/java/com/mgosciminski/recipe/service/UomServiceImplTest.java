@@ -272,4 +272,33 @@ public class UomServiceImplTest {
         thrown.expectMessage(NOT_FOUND);
 
     }
+
+    @Test
+    public void findByIdPresent() throws Exception
+    {
+        //given
+        Optional<UnitOfMeasure> unitOfMeasure = Optional.of(new UnitOfMeasure());
+        doReturn(unitOfMeasure).when(uomServiceSpy).findById(anyLong());
+        //when
+        UnitOfMeasure result = uomServiceSpy.findByIdPresentOrException(1L);
+
+        //then
+        assertNotNull(result);
+        verify(uomServiceSpy).findById(anyLong());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void findByIdThrowException() throws Exception
+    {
+        //given
+        doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
+
+        //when
+        UnitOfMeasure result = uomServiceSpy.findByIdPresentOrException(1L);
+
+        //then
+        verify(uomServiceSpy).findById(anyLong());
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(NOT_FOUND);
+    }
 }

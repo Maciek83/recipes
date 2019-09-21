@@ -126,7 +126,7 @@ public class UnitOfMeasureControllerTest {
     public void addNewUomIdNotNull()throws Exception
     {
         //given
-        when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
+        when(uomService.findByIdPresentOrException(anyLong())).thenReturn(new UnitOfMeasure());
         when(uomService.save(any(UnitOfMeasure.class))).thenReturn(new UnitOfMeasure());
 
         //when
@@ -139,7 +139,7 @@ public class UnitOfMeasureControllerTest {
         .andExpect(view().name("redirect:/uom"));
 
         //then
-        verify(uomService).findById(anyLong());
+        verify(uomService).findByIdPresentOrException(anyLong());
         verify(uomService).save(any(UnitOfMeasure.class));
     }
 
@@ -147,7 +147,7 @@ public class UnitOfMeasureControllerTest {
     public void addNewUomIdNotNullButOptionalNull()throws Exception
     {
         //given
-        when(uomService.findById(anyLong())).thenReturn(Optional.empty());
+        when(uomService.findByIdPresentOrException(anyLong())).thenThrow(new NotFoundException(Error404));
 
         //when
         mockMvc.perform(post("/uom/new")
@@ -159,7 +159,7 @@ public class UnitOfMeasureControllerTest {
                 .andExpect(view().name(Error404));
 
         //then
-        verify(uomService).findById(anyLong());
+        verify(uomService).findByIdPresentOrException(anyLong());
         verify(uomService,times(0)).save(any(UnitOfMeasure.class));
     }
 

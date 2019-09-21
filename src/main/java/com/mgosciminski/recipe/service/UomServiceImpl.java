@@ -45,6 +45,11 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
+    public UnitOfMeasure findByIdPresentOrException(Long id) throws NotFoundException {
+        return findById(id).orElseThrow(()-> new NotFoundException(NOT_FOUND));
+    }
+
+    @Override
     public UnitOfMeasureDto findDtoById(Long id) throws NotFoundException {
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findById(id);
@@ -85,16 +90,11 @@ public class UomServiceImpl implements UomService {
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findById(unitOfMeasureDto.getId());
 
-        if(optionalUnitOfMeasure.isPresent())
-        {
-            UnitOfMeasure unitOfMeasure = optionalUnitOfMeasure.get();
-            unitOfMeasure.setUom(unitOfMeasure.getUom());
-            return save(unitOfMeasure);
-        }
-        else
-        {
-            throw new NotFoundException(NOT_FOUND);
-        }
+        return optionalUnitOfMeasure
+                .map(unitOfMeasure -> {
+                    unitOfMeasure.setUom(unitOfMeasureDto.getUom());
+                    return save(unitOfMeasure); })
+                .orElseThrow(()->new NotFoundException(NOT_FOUND));
     }
 
     @Override
