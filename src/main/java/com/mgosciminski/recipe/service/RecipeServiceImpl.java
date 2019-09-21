@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.converter.RecipeDtoToRecipe;
+import com.mgosciminski.recipe.converter.RecipeToRecipeDto;
 import com.mgosciminski.recipe.domain.*;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.model.IngredientDto;
@@ -9,6 +10,7 @@ import com.mgosciminski.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientService ingredientService;
     private final CategoryService categoryService;
     private final UomService uomService;
+    private final RecipeToRecipeDto recipeToRecipeDto;
 
     private Recipe nullObject = new Recipe();
     private final Long BAD = -1L;
@@ -29,13 +32,16 @@ public class RecipeServiceImpl implements RecipeService {
                              RecipeDtoToRecipe recipeDtoToRecipe,
                              NoteService noteService,
                              IngredientService ingredientService,
-                             CategoryService categoryService, UomService uomService) {
+                             CategoryService categoryService,
+                             UomService uomService,
+                             RecipeToRecipeDto recipeToRecipeDto) {
         this.repository = repository;
         this.recipeDtoToRecipe = recipeDtoToRecipe;
         this.noteService = noteService;
         this.ingredientService = ingredientService;
         this.categoryService = categoryService;
         this.uomService = uomService;
+        this.recipeToRecipeDto = recipeToRecipeDto;
     }
 
     @Override
@@ -83,6 +89,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Iterable<Recipe> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Iterable<RecipeDto> findAllDto() {
+        LinkedList<RecipeDto> recipeDtos = new LinkedList<>();
+        findAll().forEach(recipe -> recipeDtos.add(convertRecipeToRecipeDto(recipe)));
+        return recipeDtos;
     }
 
     @Override
@@ -148,5 +161,10 @@ public class RecipeServiceImpl implements RecipeService {
         });
 
         return save(recipe);
+    }
+
+    @Override
+    public RecipeDto convertRecipeToRecipeDto(Recipe recipe) {
+        return recipeToRecipeDto.convert(recipe);
     }
 }

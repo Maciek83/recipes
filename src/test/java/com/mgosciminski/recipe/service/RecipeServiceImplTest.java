@@ -1,9 +1,6 @@
 package com.mgosciminski.recipe.service;
 
-import com.mgosciminski.recipe.converter.CategoryDtoToCategory;
-import com.mgosciminski.recipe.converter.IngredientDtoToIngredient;
-import com.mgosciminski.recipe.converter.NoteDtoToNote;
-import com.mgosciminski.recipe.converter.RecipeDtoToRecipe;
+import com.mgosciminski.recipe.converter.*;
 import com.mgosciminski.recipe.domain.*;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.model.IngredientDto;
@@ -19,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,6 +40,8 @@ public class RecipeServiceImplTest {
     CategoryServiceImpl categoryService;
     @Mock
     UomService uomService;
+    @Mock
+    RecipeToRecipeDto recipeToRecipeDto;
 
 
     @InjectMocks
@@ -146,6 +146,26 @@ public class RecipeServiceImplTest {
     }
 
     @Test
+    public void findAllDto()
+    {
+        //given
+        LinkedList<Recipe> recipes = new LinkedList<>();
+        recipes.add(new Recipe());
+        recipes.add(new Recipe());
+        doReturn(new RecipeDto()).when(serviceSpy).convertRecipeToRecipeDto(any());
+        doReturn(recipes).when(serviceSpy).findAll();
+        //when
+        LinkedList<RecipeDto> recipeDtos = (LinkedList<RecipeDto>) serviceSpy.findAllDto();
+
+        //then
+        assertNotNull(recipeDtos);
+        assertEquals(recipeDtos.size(),2);
+        verify(serviceSpy,times(2)).convertRecipeToRecipeDto(any());
+        verify(serviceSpy).findAll();
+
+    }
+
+    @Test
     public void findByIdNull()
     {
         //given
@@ -245,5 +265,18 @@ public class RecipeServiceImplTest {
         verify(categoryService,times(2)).findById(anyLong());
         verify(categoryService,times(2)).save(any(Category.class));
         verify(serviceSpy).save(any(Recipe.class));
+    }
+
+    @Test
+    public void convertRecipeToRecipeDto()
+    {
+        //given
+        when(recipeToRecipeDto.convert(any(Recipe.class))).thenReturn(new RecipeDto());
+
+        //when
+        RecipeDto recipeDto = service.convertRecipeToRecipeDto(new Recipe());
+
+        //then
+        verify(recipeToRecipeDto).convert(any(Recipe.class));
     }
 }

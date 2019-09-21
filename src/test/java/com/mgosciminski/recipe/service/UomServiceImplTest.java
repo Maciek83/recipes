@@ -5,8 +5,11 @@ import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
+import javassist.NotFoundException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,8 +39,12 @@ public class UomServiceImplTest {
 
     private UomServiceImpl uomServiceSpy;
 
-
     private Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    private final String NOT_FOUND = "can't find this id";
 
     @Before
     public void setUp() throws Exception {
@@ -177,6 +184,36 @@ public class UomServiceImplTest {
         assertEquals(result,unitOfMeasureOptional);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void findByIdDtoNotPresent() throws Exception
+    {
+        //given
+        doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
+
+        //when
+        uomServiceSpy.findDtoById(1L);
+
+        //then
+        verify(uomServiceSpy).findById(anyLong());
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(NOT_FOUND);
+    }
+
+    @Test
+    public void findByIdDtoPresent() throws Exception
+    {
+        //given
+        doReturn(Optional.of(new UnitOfMeasure())).when(uomServiceSpy).findById(anyLong());
+        doReturn(new UnitOfMeasureDto()).when(uomServiceSpy).convertToDto(new UnitOfMeasure());
+        //when
+        UnitOfMeasureDto unitOfMeasureDto = uomServiceSpy.findDtoById(1L);
+
+        //then
+        assertNotNull(unitOfMeasureDto);
+        verify(uomServiceSpy).findById(anyLong());
+        verify(uomServiceSpy).convertToDto(any());
+    }
+
     @Test
     public void convertToDto() throws Exception
     {
@@ -218,7 +255,7 @@ public class UomServiceImplTest {
         verify(uomServiceSpy).save(any(UnitOfMeasure.class));
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void editNotPresent() throws Exception
     {
         //given
@@ -227,14 +264,12 @@ public class UomServiceImplTest {
         doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
 
         //when
-        UnitOfMeasure result = uomServiceSpy.edit(unitOfMeasureDto);
+        uomServiceSpy.edit(unitOfMeasureDto);
 
         //then
-        assertNotNull(result);
-        assertEquals(result.getUom(),"bad");
-
-
         verify(uomServiceSpy).findById(anyLong());
-        verify(uomServiceSpy,times(0)).save(any(UnitOfMeasure.class));
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(NOT_FOUND);
+
     }
 }

@@ -3,6 +3,7 @@ package com.mgosciminski.recipe.controller;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
+import javassist.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,9 +42,11 @@ public class UnitOfMeasureControllerTest {
     @InjectMocks
     UnitOfMeasureController unitOfMeasureController;
 
+
     private MockMvc mockMvc;
 
     private final String UOM_FORM = "uom/form/index.html";
+    private final String Error404 = "404error";
 
     @Before
     public void setup() {
@@ -152,8 +155,8 @@ public class UnitOfMeasureControllerTest {
                 .param("uom","unit")
                 .param("id","1")
         )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/uom"));
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(Error404));
 
         //then
         verify(uomService).findById(anyLong());
@@ -172,8 +175,7 @@ public class UnitOfMeasureControllerTest {
     public void editExisting() throws Exception
     {
         //given
-        when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
-        when(uomService.convertToDto(any())).thenReturn(new UnitOfMeasureDto());
+        when(uomService.findDtoById(anyLong())).thenReturn(new UnitOfMeasureDto());
 
         //when
         mockMvc.perform(get("/uom/1/edit"))
@@ -182,27 +184,25 @@ public class UnitOfMeasureControllerTest {
                 .andExpect(model().attributeExists("uom"));
 
         //then
-        verify(uomService).findById(anyLong());
-        verify(uomService).convertToDto(any());
+        verify(uomService).findDtoById(anyLong());
+
     }
 
     @Test
     public void editNull() throws Exception
     {
         //given
-        when(uomService.findById(anyLong())).thenReturn(Optional.empty());
+        when(uomService.findDtoById(anyLong())).thenThrow(new NotFoundException("can't find id"));
 
         //when
-        mockMvc.perform(get("/uom/1/edit"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(UOM_FORM))
-                .andExpect(model().attributeExists("uom"))
-                .andExpect(model().attribute("uom",hasProperty("uom",is("imBad"))));
+        mockMvc.perform(get("/uom/11/edit"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(Error404));
 
 
         //then
-        verify(uomService).findById(anyLong());
-        verify(uomService,times(0)).convertToDto(any());
+        verify(uomService).findDtoById(anyLong());
+
     }
 
 }

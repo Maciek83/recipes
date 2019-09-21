@@ -5,6 +5,7 @@ import com.mgosciminski.recipe.converter.UomDtoToUnitOfMeasure;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.repository.UomRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,7 +17,7 @@ public class UomServiceImpl implements UomService {
     private final UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure;
     private final UnitOfMeasureToUomDto unitOfMeasureToUomDto;
 
-    private UnitOfMeasure nullObject;
+    private final String NOT_FOUND = "can't find this id";
 
     public UomServiceImpl(UomRepository uomRepository,
                           UomDtoToUnitOfMeasure uomDtoToUnitOfMeasure,
@@ -41,6 +42,16 @@ public class UomServiceImpl implements UomService {
     @Override
     public Optional<UnitOfMeasure> findById(Long id) {
         return uomRepository.findById(id);
+    }
+
+    @Override
+    public UnitOfMeasureDto findDtoById(Long id) throws NotFoundException {
+
+        Optional<UnitOfMeasure> optionalUnitOfMeasure = findById(id);
+
+        return optionalUnitOfMeasure
+                .map(this::convertToDto)
+                .orElseThrow(()->new NotFoundException(NOT_FOUND));
     }
 
     @Override
@@ -70,7 +81,7 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
-    public UnitOfMeasure edit(UnitOfMeasureDto unitOfMeasureDto) {
+    public UnitOfMeasure edit(UnitOfMeasureDto unitOfMeasureDto) throws NotFoundException {
 
         Optional<UnitOfMeasure> optionalUnitOfMeasure = findById(unitOfMeasureDto.getId());
 
@@ -82,11 +93,7 @@ public class UomServiceImpl implements UomService {
         }
         else
         {
-            nullObject = new UnitOfMeasure();
-            nullObject.setUom("bad");
-            nullObject.setId(-1L);
-
-            return nullObject;
+            throw new NotFoundException(NOT_FOUND);
         }
     }
 
