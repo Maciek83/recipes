@@ -4,7 +4,6 @@ import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
 import javassist.NotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/uom")
@@ -30,7 +28,7 @@ public class UnitOfMeasureController {
 
     @GetMapping
     public String showUom(Model model) {
-        model.addAttribute("uoms", uomService.findAll());
+        model.addAttribute("uoms", uomService.findAllDto());
 
         return "uom/index";
     }

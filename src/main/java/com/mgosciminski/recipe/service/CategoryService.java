@@ -2,12 +2,15 @@ package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.domain.Category;
 import com.mgosciminski.recipe.model.CategoryDto;
+import javassist.NotFoundException;
 
 import java.util.Optional;
 
 public interface CategoryService {
-    Iterable<CategoryDto> findAll();
+    Iterable<CategoryDto> findAllDto();
     Optional<Category> findById(Long id);
+    Category findByIdPresentOfException(Long id) throws NotFoundException;
+    CategoryDto findDtoById(Long id) throws NotFoundException;
     Category save(Category category);
     Category save(CategoryDto categoryDto);
     Category edit(CategoryDto categoryDto);

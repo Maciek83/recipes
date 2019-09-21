@@ -28,7 +28,7 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
-    public Iterable<UnitOfMeasureDto> findAll() {
+    public Iterable<UnitOfMeasureDto> findAllDto() {
         List<UnitOfMeasureDto> unitOfMeasureDtos = new LinkedList<>();
         uomRepository.findAll().forEach(unitOfMeasure -> unitOfMeasureDtos.add(convertToDto(unitOfMeasure)));
         return unitOfMeasureDtos;

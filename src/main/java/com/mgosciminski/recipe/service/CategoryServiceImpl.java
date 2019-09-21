@@ -5,6 +5,7 @@ import com.mgosciminski.recipe.converter.CategoryToCategoryDto;
 import com.mgosciminski.recipe.domain.Category;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.repository.CategoryRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -19,7 +20,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryToCategoryDto categoryToCategoryDto;
 
     private Category nullObject = new Category();
-    private final String BAD = "bad";
+
+    private final String NOT_FOUND = "can't find this id";
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,
                                CategoryDtoToCategory categoryDtoToCategory, CategoryToCategoryDto categoryToCategoryDto) {
@@ -29,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Iterable<CategoryDto> findAll() {
+    public Iterable<CategoryDto> findAllDto() {
         List<CategoryDto> categoriesDto = new LinkedList<>();
         categoryRepository.findAll().forEach(category -> categoriesDto.add(convertCategoryToCategoryDto(category)));
         return categoriesDto;
@@ -39,6 +41,24 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<Category> findById(Long id) {
 
         return categoryRepository.findById(id);
+    }
+
+    @Override
+    public Category findByIdPresentOfException(Long id) throws NotFoundException {
+
+        Optional<Category> optionalCategory = findById(id);
+
+        return optionalCategory.orElseThrow(()-> new NotFoundException(NOT_FOUND));
+    }
+
+    @Override
+    public CategoryDto findDtoById(Long id) throws NotFoundException {
+
+        Optional<Category> optionalCategory = findById(id);
+
+        return optionalCategory
+                .map(this::convertCategoryToCategoryDto)
+                .orElseThrow(()->new NotFoundException(NOT_FOUND));
     }
 
     @Override

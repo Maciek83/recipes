@@ -102,7 +102,7 @@ public class UomServiceImplTest {
         doReturn(new UnitOfMeasureDto()).when(uomServiceSpy).convertToDto(any(UnitOfMeasure.class));
 
         //when
-        List<UnitOfMeasureDto> result = (List<UnitOfMeasureDto>) uomServiceSpy.findAll();
+        List<UnitOfMeasureDto> result = (List<UnitOfMeasureDto>) uomServiceSpy.findAllDto();
 
 
         //then

@@ -5,8 +5,11 @@ import com.mgosciminski.recipe.converter.CategoryToCategoryDto;
 import com.mgosciminski.recipe.domain.Category;
 import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.repository.CategoryRepository;
+import javassist.NotFoundException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,10 +39,13 @@ public class CategoryServiceImplTest {
     @InjectMocks
     CategoryServiceImpl categoryService;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     private CategoryServiceImpl categoryServiceSpy;
 
     private Set<Category> categories = new HashSet<>();
-    private final String BAD = "bad";
+    private final String NOT_FOUND = "can't find this id";
 
     @Before
     public void setup()
@@ -60,7 +66,7 @@ public class CategoryServiceImplTest {
         doReturn(new CategoryDto()).when(categoryServiceSpy).convertCategoryToCategoryDto(any(Category.class));
 
         //when
-        List<CategoryDto> result = (List<CategoryDto>) categoryServiceSpy.findAll();
+        List<CategoryDto> result = (List<CategoryDto>) categoryServiceSpy.findAllDto();
 
         //then
         assertNotNull(result);
@@ -246,5 +252,64 @@ public class CategoryServiceImplTest {
         //then
         verify(categoryToCategoryDto).convert(any(Category.class));
 
+    }
+
+    @Test
+    public void findDtoByIdExist() throws Exception
+    {
+        //given
+        doReturn(Optional.of(new Category())).when(categoryServiceSpy).findById(anyLong());
+        doReturn(new CategoryDto()).when(categoryServiceSpy).convertCategoryToCategoryDto(any());
+        //when
+
+        categoryServiceSpy.findDtoById(1L);
+
+        //then
+        verify(categoryServiceSpy).findById(anyLong());
+        verify(categoryServiceSpy).convertCategoryToCategoryDto(any());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void findDtoByIdNotExist()throws Exception
+    {
+        //given
+        doReturn(Optional.empty()).when(categoryServiceSpy).findById(anyLong());
+
+        //when
+        categoryServiceSpy.findDtoById(1L);
+
+        //then
+        verify(categoryServiceSpy).findDtoById(anyLong());
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(NOT_FOUND);
+    }
+
+    @Test
+    public void findByIdPresentOfException_present() throws Exception
+    {
+        //given
+        doReturn(Optional.of(new Category())).when(categoryServiceSpy).findById(anyLong());
+
+        //when
+        categoryServiceSpy.findById(1L);
+
+        //then
+        verify(categoryServiceSpy).findById(anyLong());
+
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void findByIdPresentOfException_notPresent()throws Exception
+    {
+        //given
+        doReturn(Optional.empty()).when(categoryServiceSpy).findById(anyLong());
+
+        //when
+        categoryServiceSpy.findByIdPresentOfException(1L);
+
+        //then
+        verify(categoryServiceSpy).findById(anyLong());
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(NOT_FOUND);
     }
 }

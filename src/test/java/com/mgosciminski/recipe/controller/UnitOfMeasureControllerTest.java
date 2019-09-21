@@ -15,10 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.hasProperty;
@@ -76,13 +74,13 @@ public class UnitOfMeasureControllerTest {
         unitOfMeasureDtos.add(unitOfMeasureDto);
 
         //when
-        when(uomService.findAll()).thenReturn(unitOfMeasureDtos);
+        when(uomService.findAllDto()).thenReturn(unitOfMeasureDtos);
         ArgumentCaptor<Set<UnitOfMeasureDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
         String viewName = unitOfMeasureController.showUom(model);
 
         //then
         assertEquals(viewName, "uom/index");
-        verify(uomService).findAll();
+        verify(uomService).findAllDto();
         verify(model).addAttribute(eq("uoms"), argumentCaptor.capture());
         Set<UnitOfMeasureDto> unitOfMeasureSet = argumentCaptor.getValue();
         assertEquals(2, unitOfMeasureDtos.size());
