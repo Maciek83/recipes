@@ -132,6 +132,14 @@ public class CategoryControllerTest {
     }
 
     @Test
+    public void editIdNotNumber() throws Exception
+    {
+        mockMvc.perform(get("/category/1d/edit"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(Error404));
+    }
+
+    @Test
     public void editNotPresent() throws Exception
     {
         //given

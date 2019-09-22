@@ -20,6 +20,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final String CAT_FORM = "category/form/index";
     private final String Error404 = "404error";
+    private final String NOT_FOUND = "can't find this id";
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -45,6 +46,9 @@ public class CategoryController {
     @GetMapping("{id}/edit")
     public String edit(@PathVariable String id,Model model) throws NotFoundException
     {
+        try { Long.valueOf(id); }
+        catch (Exception e) { throw new NotFoundException(NOT_FOUND);}
+
         CategoryDto categoryDto = categoryService.findDtoById(Long.valueOf(id));
         model.addAttribute("category",categoryDto);
 
@@ -73,7 +77,7 @@ public class CategoryController {
         return "redirect:/category";
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound() {
         ModelAndView modelAndView = new ModelAndView();

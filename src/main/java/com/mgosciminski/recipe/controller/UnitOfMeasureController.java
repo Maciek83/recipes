@@ -20,6 +20,7 @@ public class UnitOfMeasureController {
     private final UomService uomService;
     private final String Error404 = "404error";
     private final String UOM_FORM = "uom/form/index.html";
+    private final String NOT_FOUND = "can't find this id";
 
     public UnitOfMeasureController(UomService uomService) {
         this.uomService = uomService;
@@ -43,6 +44,9 @@ public class UnitOfMeasureController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable String id, Model model) throws NotFoundException {
+
+        try {Long.valueOf(id); }
+        catch (Exception e) { throw new NotFoundException(NOT_FOUND);}
 
         UnitOfMeasureDto unitOfMeasureDto = uomService.findDtoById(Long.valueOf(id));
         model.addAttribute("uom", unitOfMeasureDto);
@@ -68,7 +72,7 @@ public class UnitOfMeasureController {
         return "redirect:/uom";
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound() {
         ModelAndView modelAndView = new ModelAndView();

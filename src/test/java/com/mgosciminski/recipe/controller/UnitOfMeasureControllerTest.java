@@ -187,6 +187,14 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
+    public void editIdNotNumber()throws Exception
+    {
+        mockMvc.perform(get("/uom/1c/edit"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(Error404));
+    }
+
+    @Test
     public void editNull() throws Exception
     {
         //given

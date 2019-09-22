@@ -7,6 +7,7 @@ import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.model.RecipeDto;
 import com.mgosciminski.recipe.repository.RecipeRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,8 +26,8 @@ public class RecipeServiceImpl implements RecipeService {
     private final UomService uomService;
     private final RecipeToRecipeDto recipeToRecipeDto;
 
-    private Recipe nullObject = new Recipe();
-    private final Long BAD = -1L;
+    private final String NOT_FOUND = "can't find this id";
+
 
     public RecipeServiceImpl(RecipeRepository repository,
                              RecipeDtoToRecipe recipeDtoToRecipe,
@@ -99,19 +100,16 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findById(Long id) throws NotFoundException
+    {
+        return repository
+                .findById(id)
+                .orElseThrow(()->new NotFoundException(NOT_FOUND));
+    }
 
-        Optional<Recipe> optionalRecipe = repository.findById(id);
-
-        if (optionalRecipe.isPresent())
-        {
-            return optionalRecipe.get();
-        }
-        else
-        {
-            nullObject.setId(BAD);
-            return nullObject;
-        }
+    @Override
+    public RecipeDto findDtoById(Long id) throws NotFoundException {
+        return convertRecipeToRecipeDto(findById(id));
     }
 
     @Override
@@ -127,7 +125,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe edit(RecipeDto recipeDto) {
+    public Recipe edit(RecipeDto recipeDto) throws NotFoundException {
 
         Recipe recipe = findById(recipeDto.getId());
         recipe.setDescription(recipeDto.getDescription());
