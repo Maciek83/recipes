@@ -49,25 +49,6 @@ public class RecipeDtoToRecipe implements Converter<RecipeDto,Recipe> {
         recipe.setDifficulty(Difficulty.valueOf(recipeDto.getDifficulty()));
         recipe.setNotes(noteDtoToNote.convert(recipeDto.getNoteDto()));
 
-        Set<IngredientDto> ingredientDtos = recipeDto.getIngredientDtos();
-        Set<Ingredient> ingredients = new HashSet<>();
-        ingredientDtos.forEach(ingredientDto ->
-        {
-            Ingredient ingredient = ingredientDtoToIngredient.convert(ingredientDto);
-            UnitOfMeasure unitOfMeasure = uomDtoToUnitOfMeasure.convert(ingredientDto.getUnitOfMeasureDto());
-            ingredient.setUnitOfMeasure(unitOfMeasure);
-            ingredients.add(ingredient);
-        });
-
-        recipe.setIngredients(ingredients);
-
-        Set<CategoryDto> categoryDtos = recipeDto.getCategoryDtos();
-        Set<Category> categories = new HashSet<>();
-        categoryDtos.forEach(categoryDto -> {
-            categories.add(categoryDtoToCategory.convert(categoryDto));
-        });
-
-        recipe.setCategories(categories);
 
         return recipe;
     }

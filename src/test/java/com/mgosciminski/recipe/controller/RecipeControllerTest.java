@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.LinkedList;
 
@@ -45,6 +46,8 @@ public class RecipeControllerTest {
 
     private final String Error404 = "404error";
     private final String NOT_FOUND = "can't find this id";
+    private final String REC_FORM = "recipe/new/index";
+
 
     @Before
     public void setUp() throws Exception {
@@ -114,4 +117,15 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(view().name(Error404));
     }
+
+    @Test
+    public void gotoCreateNewRecipeForm() throws Exception
+    {
+        mockMvc.perform(get("/recipe/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/new/index"));
+    }
+
+
 }

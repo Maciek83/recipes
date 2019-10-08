@@ -73,8 +73,6 @@ public class RecipeToRecipeDtoTest {
 
         //when
         when(noteToNoteDto.convert(any(Note.class))).thenReturn(new NoteDto());
-        when(ingredientToIngredientDto.convert(any(Ingredient.class))).thenReturn(new IngredientDto());
-        when(categoryToCategoryDto.convert(any(Category.class))).thenReturn(new CategoryDto());
 
         RecipeDto recipeDto = recipeToRecipeDto.convert(recipe);
 
@@ -83,7 +81,5 @@ public class RecipeToRecipeDtoTest {
         assertEquals(recipeDto.getDescription(),"description");
 
         verify(noteToNoteDto,times(1)).convert(any(Note.class));
-        verify(ingredientToIngredientDto,times(2)).convert(any(Ingredient.class));
-        verify(categoryToCategoryDto,times(2)).convert(any(Category.class));
     }
 }

@@ -141,22 +141,6 @@ public class RecipeServiceImpl implements RecipeService {
         note.setNotes(recipeDto.getNoteDto().getNotes());
         noteService.save(note);
 
-        Set<IngredientDto> ingredientDtos = recipeDto.getIngredientDtos();
-        ingredientDtos.forEach(ingredientDto -> {
-            Ingredient ingredient = ingredientService.findById(ingredientDto.getId());
-            ingredient.setDescription(ingredientDto.getDescription());
-            ingredient.setAmount(ingredientDto.getAmount());
-            ingredientService.save(ingredient);
-        });
-
-        Set<CategoryDto> categoryDtos = recipeDto.getCategoryDtos();
-        categoryDtos.forEach(categoryDto -> {
-            Optional<Category> categoryOptional = categoryService.findById(categoryDto.getId());
-            if(categoryOptional.isPresent()) {
-                categoryOptional.get().setName(categoryDto.getName());
-                categoryService.save(categoryOptional.get());
-            }
-        });
 
         return save(recipe);
     }

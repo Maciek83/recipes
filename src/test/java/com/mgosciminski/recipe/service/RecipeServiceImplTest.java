@@ -230,31 +230,13 @@ public class RecipeServiceImplTest {
         NoteDto noteDto = new NoteDto();
         noteDto.setId(1L);
         recipeDto.setNoteDto(noteDto);
-        Set<IngredientDto> ingredientDtos = new HashSet<>();
-        IngredientDto ingredientDto = new IngredientDto();
-        ingredientDto.setId(1L);
-        IngredientDto ingredientDto1 = new IngredientDto();
-        ingredientDto1.setId(2L);
-        ingredientDtos.add(ingredientDto);
-        ingredientDtos.add(ingredientDto1);
-        recipeDto.setIngredientDtos(ingredientDtos);
-        Set<CategoryDto> categoryDtos = new HashSet<>();
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setId(1L);
-        CategoryDto categoryDto1 = new CategoryDto();
-        categoryDto1.setId(2L);
-        categoryDtos.add(categoryDto);
-        categoryDtos.add(categoryDto1);
-        recipeDto.setCategoryDtos(categoryDtos);
+
 
 
         //when
         doReturn(recipe).when(serviceSpy).findById(anyLong());
         when(noteService.findById(anyLong())).thenReturn(new Note());
         when(noteService.save(any(Note.class))).thenReturn(new Note());
-        when(ingredientService.findById(anyLong())).thenReturn(new Ingredient());
-        when(ingredientService.save(any(Ingredient.class))).thenReturn(new Ingredient());
-        when(categoryService.findById(anyLong())).thenReturn(Optional.of(new Category()));
         doReturn(recipe).when(serviceSpy).save(any(Recipe.class));
 
         Recipe result = serviceSpy.edit(recipeDto);
@@ -265,10 +247,6 @@ public class RecipeServiceImplTest {
         verify(serviceSpy).findById(anyLong());
         verify(noteService).findById(anyLong());
         verify(noteService).save(any(Note.class));
-        verify(ingredientService,times(2)).findById(anyLong());
-        verify(ingredientService,times(2)).save(any(Ingredient.class));
-        verify(categoryService,times(2)).findById(anyLong());
-        verify(categoryService,times(2)).save(any(Category.class));
         verify(serviceSpy).save(any(Recipe.class));
     }
 

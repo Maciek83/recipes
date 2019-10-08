@@ -51,25 +51,10 @@ public class RecipeDtoToRecipeTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setDescription("desc");
         recipeDto.setDifficulty("EASY");
-        Set<IngredientDto> ingredientDtos = new HashSet<>();
-        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
-        IngredientDto ingredientDto = new IngredientDto();
-        ingredientDto.setUnitOfMeasureDto(unitOfMeasureDto);
-        IngredientDto ingredientDto1 = new IngredientDto();
-        ingredientDto1.setUnitOfMeasureDto(unitOfMeasureDto);
-        ingredientDtos.add(ingredientDto);
-        ingredientDtos.add(ingredientDto1);
-        recipeDto.setIngredientDtos(ingredientDtos);
-        Set<CategoryDto> categoryDtos = new HashSet<>();
-        categoryDtos.add(new CategoryDto());
-        categoryDtos.add(new CategoryDto());
-        recipeDto.setCategoryDtos(categoryDtos);
+
 
         //when
         when(noteDtoToNote.convert(any())).thenReturn(new Note());
-        when(ingredientDtoToIngredient.convert(any())).thenReturn(new Ingredient());
-        when(uomDtoToUnitOfMeasure.convert(any())).thenReturn(new UnitOfMeasure());
-        when(categoryDtoToCategory.convert(any())).thenReturn(new Category());
         Recipe result = recipeDtoToRecipe.convert(recipeDto);
 
         //then
@@ -77,8 +62,6 @@ public class RecipeDtoToRecipeTest {
         assertEquals(recipeDto.getDescription(),result.getDescription());
 
         verify(noteDtoToNote).convert(any());
-        verify(ingredientDtoToIngredient,times(2)).convert(any());
-        verify(uomDtoToUnitOfMeasure,times(2)).convert(any());
-        verify(categoryDtoToCategory,times(2)).convert(any());
+
     }
 }

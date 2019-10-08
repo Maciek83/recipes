@@ -1,8 +1,5 @@
 package com.mgosciminski.recipe.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class RecipeDto {
 
     private Long id;
@@ -15,8 +12,6 @@ public class RecipeDto {
     private String directions;
     private String difficulty;
     private NoteDto noteDto;
-    private Set<IngredientDto> ingredientDtos = new HashSet<>();
-    private Set<CategoryDto> categoryDtos = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -96,21 +91,5 @@ public class RecipeDto {
 
     public void setNoteDto(NoteDto noteDto) {
         this.noteDto = noteDto;
-    }
-
-    public Set<IngredientDto> getIngredientDtos() {
-        return ingredientDtos;
-    }
-
-    public void setIngredientDtos(Set<IngredientDto> ingredientDtos) {
-        this.ingredientDtos = ingredientDtos;
-    }
-
-    public Set<CategoryDto> getCategoryDtos() {
-        return categoryDtos;
-    }
-
-    public void setCategoryDtos(Set<CategoryDto> categoryDtos) {
-        this.categoryDtos = categoryDtos;
     }
 }
