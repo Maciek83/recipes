@@ -2,10 +2,7 @@ package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.converter.*;
 import com.mgosciminski.recipe.domain.*;
-import com.mgosciminski.recipe.model.CategoryDto;
-import com.mgosciminski.recipe.model.IngredientDto;
-import com.mgosciminski.recipe.model.NoteDto;
-import com.mgosciminski.recipe.model.RecipeDto;
+import com.mgosciminski.recipe.model.*;
 import com.mgosciminski.recipe.repository.RecipeRepository;
 import javassist.NotFoundException;
 import org.junit.Before;
@@ -44,7 +41,7 @@ public class RecipeServiceImplTest {
     @Mock
     UomService uomService;
     @Mock
-    RecipeToRecipeDto recipeToRecipeDto;
+    RecipeToRecipeDtoDisplay recipeToRecipeDto;
 
 
     @InjectMocks
@@ -159,10 +156,10 @@ public class RecipeServiceImplTest {
         LinkedList<Recipe> recipes = new LinkedList<>();
         recipes.add(new Recipe());
         recipes.add(new Recipe());
-        doReturn(new RecipeDto()).when(serviceSpy).convertRecipeToRecipeDto(any());
+        doReturn(new RecipeDtoDisplay()).when(serviceSpy).convertRecipeToRecipeDto(any());
         doReturn(recipes).when(serviceSpy).findAll();
         //when
-        LinkedList<RecipeDto> recipeDtos = (LinkedList<RecipeDto>) serviceSpy.findAllDto();
+        LinkedList<RecipeDtoDisplay> recipeDtos = (LinkedList<RecipeDtoDisplay>) serviceSpy.findAllDto();
 
         //then
         assertNotNull(recipeDtos);
@@ -254,10 +251,10 @@ public class RecipeServiceImplTest {
     public void convertRecipeToRecipeDto()
     {
         //given
-        when(recipeToRecipeDto.convert(any(Recipe.class))).thenReturn(new RecipeDto());
+        when(recipeToRecipeDto.convert(any(Recipe.class))).thenReturn(new RecipeDtoDisplay());
 
         //when
-        RecipeDto recipeDto = service.convertRecipeToRecipeDto(new Recipe());
+        RecipeDtoDisplay recipeDto = service.convertRecipeToRecipeDto(new Recipe());
 
         //then
         verify(recipeToRecipeDto).convert(any(Recipe.class));
@@ -267,12 +264,12 @@ public class RecipeServiceImplTest {
     public void findDtoByIdOk() throws Exception
     {
         //given
-        RecipeDto recipeDto = new RecipeDto();
+        RecipeDtoDisplay recipeDto = new RecipeDtoDisplay();
         doReturn(new Recipe()).when(serviceSpy).findById(anyLong());
         doReturn(recipeDto).when(serviceSpy).convertRecipeToRecipeDto(any());
 
         //when
-        RecipeDto result = serviceSpy.findDtoById(1L);
+        RecipeDtoDisplay result = serviceSpy.findDtoById(1L);
 
         //then
         assertNotNull(result);

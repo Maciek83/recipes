@@ -1,18 +1,16 @@
 package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.converter.RecipeDtoToRecipe;
-import com.mgosciminski.recipe.converter.RecipeToRecipeDto;
+import com.mgosciminski.recipe.converter.RecipeToRecipeDtoDisplay;
 import com.mgosciminski.recipe.domain.*;
-import com.mgosciminski.recipe.model.CategoryDto;
-import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.model.RecipeDto;
+import com.mgosciminski.recipe.model.RecipeDtoDisplay;
 import com.mgosciminski.recipe.repository.RecipeRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -24,7 +22,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientService ingredientService;
     private final CategoryService categoryService;
     private final UomService uomService;
-    private final RecipeToRecipeDto recipeToRecipeDto;
+    private final RecipeToRecipeDtoDisplay recipeToRecipeDto;
 
     private final String NOT_FOUND = "can't find this id";
 
@@ -35,7 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
                              IngredientService ingredientService,
                              CategoryService categoryService,
                              UomService uomService,
-                             RecipeToRecipeDto recipeToRecipeDto) {
+                             RecipeToRecipeDtoDisplay recipeToRecipeDto) {
         this.repository = repository;
         this.recipeDtoToRecipe = recipeDtoToRecipe;
         this.noteService = noteService;
@@ -93,8 +91,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Iterable<RecipeDto> findAllDto() {
-        LinkedList<RecipeDto> recipeDtos = new LinkedList<>();
+    public Iterable<RecipeDtoDisplay> findAllDto() {
+        LinkedList<RecipeDtoDisplay> recipeDtos = new LinkedList<>();
         findAll().forEach(recipe -> recipeDtos.add(convertRecipeToRecipeDto(recipe)));
         return recipeDtos;
     }
@@ -108,7 +106,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto findDtoById(Long id) throws NotFoundException {
+    public RecipeDtoDisplay findDtoById(Long id) throws NotFoundException {
         return convertRecipeToRecipeDto(findById(id));
     }
 
@@ -146,7 +144,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto convertRecipeToRecipeDto(Recipe recipe) {
+    public RecipeDtoDisplay convertRecipeToRecipeDto(Recipe recipe) {
         return recipeToRecipeDto.convert(recipe);
     }
 }

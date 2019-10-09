@@ -1,7 +1,5 @@
 package com.mgosciminski.recipe.domain;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -24,7 +22,7 @@ public class Recipe{
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "recipe")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "recipe")
     private Note notes;
 
 

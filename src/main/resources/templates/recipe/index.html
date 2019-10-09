@@ -12,11 +12,13 @@
     <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>Difficulty</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="r:${recipes}">
-        <td><a th:href="@{'/recipe/' + ${r.id}+'/show'}">Show</a></td>
+        <td><a th:href="@{'/recipe/' + ${r.id}}">Show</a></td>
+        <td th:text="${r.description}"></td>
         <td th:text="${r.difficulty}"></td>
     </tr>
     </tbody>

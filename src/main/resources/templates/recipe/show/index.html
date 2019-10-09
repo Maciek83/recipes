@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View recipe</title>
+</head>
+<body>
+
+<h2>Recipes</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Description</th>
+        <th>Prep Time</th>
+        <th>Cook Time</th>
+        <th>Servings</th>
+        <th>Source</th>
+        <th>Url</th>
+        <th>Directions</th>
+        <th>Difficulty</th>
+        <th>Note</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${recipe.description}"></td>
+        <td th:text="${recipe.prepTime}"></td>
+        <td th:text="${recipe.cookTime}"></td>
+        <td th:text="${recipe.servings}"></td>
+        <td th:text="${recipe.source}"></td>
+        <td th:text="${recipe.url}"></td>
+        <td th:text="${recipe.directions}"></td>
+        <td th:text="${recipe.difficulty}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Notes</h2>
+<p th:text="${recipe.notes.notes}"></p>
+
+<h2>Ingredients</h2>
+<a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/add'}">Add</a>
+<a th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
+<div th:each="i: ${recipe.ingredients}">
+    <p th:text="${i.description}"></p>
+</div>
+
+<h2>Categories</h2>
+<div th:each="c: ${recipe.categoryDtos}">
+    <p th:text="${c.name}"></p>
+</div>
+
+</body>
+</html>

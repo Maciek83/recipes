@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Ingredients</h2>
+<span th:if="${ingredients.size()>0}">
+    <a th:href="@{'/recipe/' + ${ingredients.get(0).recipeId}}">Back To Recipe</a>
+</span>
+<span th:if="${ingredients.size()==0}">
+    <a th:href="@{'/recipe'}">Back To Recipes</a>
+</span>
+<div th:each="i : ${ingredients}">
+    <span th:text="${i.description}"></span>
+    <span th:text="${i.unitOfMeasure}"></span>
+    <a th:href="@{'/ingredient/' + ${i.id}+'/delete'}">Delete</a>
+</div>
+</body>
+</html>

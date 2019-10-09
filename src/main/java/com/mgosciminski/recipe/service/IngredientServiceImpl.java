@@ -5,6 +5,7 @@ import com.mgosciminski.recipe.domain.Ingredient;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.repository.IngredientRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,13 +35,15 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient save(IngredientDto ingredientDto) {
+    public Ingredient save(IngredientDto ingredientDto) throws NotFoundException {
 
-        UnitOfMeasure savedUom = uomService.save(ingredientDto.getUnitOfMeasureDto());
+        UnitOfMeasure savedUom = uomService.save(uomService.findByUom(ingredientDto.getUnitOfMeasure()).orElseThrow(()-> new NotFoundException("not found")));
         Ingredient ingredient = ingredientConverter.convert(ingredientDto);
 
         if (ingredient != null)
             ingredient.setUnitOfMeasure(savedUom);
+
+        savedUom.getIngredients().add(ingredient);
 
         return ingredientRepository.save(ingredient);
     }

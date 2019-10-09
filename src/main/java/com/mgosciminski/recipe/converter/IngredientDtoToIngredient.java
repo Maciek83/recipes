@@ -4,6 +4,7 @@ import com.mgosciminski.recipe.domain.Ingredient;
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.model.UnitOfMeasureDto;
+import com.mgosciminski.recipe.service.UomService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -25,13 +26,11 @@ public class IngredientDtoToIngredient implements Converter<IngredientDto, Ingre
         {
             return null;
         }
-        UnitOfMeasureDto unitOfMeasureDto = ingredientDto.getUnitOfMeasureDto();
+
         Ingredient ingredient = new Ingredient();
         ingredient.setAmount(ingredientDto.getAmount());
         ingredient.setDescription(ingredientDto.getDescription());
-        UnitOfMeasure unitOfMeasure = uomDtoToUnitOfMeasure.convert(unitOfMeasureDto);
-        unitOfMeasure.getIngredients().add(ingredient);
-        ingredient.setUnitOfMeasure(unitOfMeasure);
+
 
         return ingredient;
     }

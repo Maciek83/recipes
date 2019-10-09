@@ -1,7 +1,8 @@
 package com.mgosciminski.recipe.controller;
 
-import com.mgosciminski.recipe.domain.Recipe;
+
 import com.mgosciminski.recipe.model.RecipeDto;
+import com.mgosciminski.recipe.model.RecipeDtoDisplay;
 import com.mgosciminski.recipe.service.RecipeService;
 import javassist.NotFoundException;
 import org.junit.Before;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import java.util.LinkedList;
 
@@ -69,21 +69,21 @@ public class RecipeControllerTest {
     @Test
     public void showRecipes() {
         //given
-        LinkedList<RecipeDto> recipes = new LinkedList<>();
-        recipes.add(new RecipeDto());
-        recipes.add(new RecipeDto());
+        LinkedList<RecipeDtoDisplay> recipes = new LinkedList<>();
+        recipes.add(new RecipeDtoDisplay());
+        recipes.add(new RecipeDtoDisplay());
 
         when(recipeService.findAllDto()).thenReturn(recipes);
 
         //when
-        ArgumentCaptor<LinkedList<RecipeDto>> argumentCaptor = ArgumentCaptor.forClass(LinkedList.class);
+        ArgumentCaptor<LinkedList<RecipeDtoDisplay>> argumentCaptor = ArgumentCaptor.forClass(LinkedList.class);
         String view = recipeController.showRecipes(model);
 
         //then
         assertNotNull(view);
         verify(recipeService).findAllDto();
         verify(model).addAttribute(eq("recipes"),argumentCaptor.capture());
-        LinkedList<RecipeDto> recipes1 = argumentCaptor.getValue();
+        LinkedList<RecipeDtoDisplay> recipes1 = argumentCaptor.getValue();
         assertEquals(recipes,recipes1);
         assertEquals(recipes1.size(),2);
 
@@ -92,7 +92,8 @@ public class RecipeControllerTest {
     @Test
     public void showSingleRecipe() throws Exception {
 
-        when(recipeService.findDtoById(anyLong())).thenReturn(new RecipeDto());
+        when(recipeService.findDtoById(anyLong())).thenReturn(new RecipeDtoDisplay());
+        when(recipeService.convertRecipeToRecipeDto(any())).thenReturn(new RecipeDtoDisplay());
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())

@@ -1,13 +1,23 @@
 package com.mgosciminski.recipe.model;
 
+
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class IngredientDto {
+
     private Long id;
+    @NotBlank
     private String description;
+    @NotNull
+    @Range(min=1, max=1000)
     private BigDecimal amount;
     private Long recipeId;
-    private UnitOfMeasureDto unitOfMeasureDto;
+    @NotBlank
+    private String unitOfMeasure;
 
     public Long getId() {
         return id;
@@ -41,11 +51,11 @@ public class IngredientDto {
         this.recipeId = recipeId;
     }
 
-    public UnitOfMeasureDto getUnitOfMeasureDto() {
-        return unitOfMeasureDto;
+    public String getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setUnitOfMeasureDto(UnitOfMeasureDto unitOfMeasureDto) {
-        this.unitOfMeasureDto = unitOfMeasureDto;
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
     }
 }

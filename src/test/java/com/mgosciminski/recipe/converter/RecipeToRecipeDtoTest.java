@@ -1,10 +1,7 @@
 package com.mgosciminski.recipe.converter;
 
 import com.mgosciminski.recipe.domain.*;
-import com.mgosciminski.recipe.model.CategoryDto;
-import com.mgosciminski.recipe.model.IngredientDto;
-import com.mgosciminski.recipe.model.NoteDto;
-import com.mgosciminski.recipe.model.RecipeDto;
+import com.mgosciminski.recipe.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,12 +26,12 @@ public class RecipeToRecipeDtoTest {
     CategoryToCategoryDto categoryToCategoryDto;
 
     @InjectMocks
-    RecipeToRecipeDto recipeToRecipeDto;
+    RecipeToRecipeDtoDisplay recipeToRecipeDto;
 
     @Test
     public void convertNull()
     {
-        RecipeDto recipeDto = recipeToRecipeDto.convert(null);
+        RecipeDtoDisplay recipeDto = recipeToRecipeDto.convert(null);
 
         assertNull(recipeDto);
 
@@ -74,7 +71,7 @@ public class RecipeToRecipeDtoTest {
         //when
         when(noteToNoteDto.convert(any(Note.class))).thenReturn(new NoteDto());
 
-        RecipeDto recipeDto = recipeToRecipeDto.convert(recipe);
+        RecipeDtoDisplay recipeDto = recipeToRecipeDto.convert(recipe);
 
         //then
         assertNotNull(recipeDto);
