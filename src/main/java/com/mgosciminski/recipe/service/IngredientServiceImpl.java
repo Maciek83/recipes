@@ -1,11 +1,8 @@
 package com.mgosciminski.recipe.service;
 
-import com.mgosciminski.recipe.converter.IngredientDtoToIngredient;
+
 import com.mgosciminski.recipe.domain.Ingredient;
-import com.mgosciminski.recipe.domain.UnitOfMeasure;
-import com.mgosciminski.recipe.model.IngredientDto;
 import com.mgosciminski.recipe.repository.IngredientRepository;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,38 +11,18 @@ import java.util.Optional;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
-    private final IngredientDtoToIngredient ingredientConverter;
-    private final UomService uomService;
 
     private final Ingredient nullObject = new Ingredient();
     private final String BAD = "bad";
 
 
-    public IngredientServiceImpl(IngredientRepository ingredientRepository,
-                                 IngredientDtoToIngredient ingredientConverter,
-                                 UomService uomService) {
+    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
-        this.ingredientConverter = ingredientConverter;
-        this.uomService = uomService;
     }
 
     @Override
     public Iterable<Ingredient> findAll() {
         return ingredientRepository.findAll();
-    }
-
-    @Override
-    public Ingredient save(IngredientDto ingredientDto) throws NotFoundException {
-
-        UnitOfMeasure savedUom = uomService.save(uomService.findByUom(ingredientDto.getUnitOfMeasure()).orElseThrow(()-> new NotFoundException("not found")));
-        Ingredient ingredient = ingredientConverter.convert(ingredientDto);
-
-        if (ingredient != null)
-            ingredient.setUnitOfMeasure(savedUom);
-
-        savedUom.getIngredients().add(ingredient);
-
-        return ingredientRepository.save(ingredient);
     }
 
     @Override

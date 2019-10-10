@@ -1,9 +1,7 @@
 package com.mgosciminski.recipe.controller;
 
-import com.mgosciminski.recipe.converter.IngredientToIngredientDto;
 import com.mgosciminski.recipe.domain.Ingredient;
 import com.mgosciminski.recipe.service.IngredientService;
-import com.mgosciminski.recipe.service.UomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

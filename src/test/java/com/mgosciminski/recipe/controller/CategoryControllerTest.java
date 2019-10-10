@@ -1,8 +1,7 @@
 package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.model.CategoryDto;
-import com.mgosciminski.recipe.model.UnitOfMeasureDto;
+import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.service.CategoryService;
 import javassist.NotFoundException;
 import org.junit.Before;
@@ -18,10 +17,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -68,23 +66,23 @@ public class CategoryControllerTest {
     public void showCategory() throws Exception {
 
         //given
-        Set<CategoryDto> categoryDtos = new HashSet<>();
-        categoryDtos.add(new CategoryDto());
+        Set<Category> categoryDtos = new HashSet<>();
+        categoryDtos.add(new Category());
 
-        CategoryDto categoryDto = new CategoryDto();
+        Category categoryDto = new Category();
         categoryDto.setName("cat");
         categoryDtos.add(categoryDto);
 
-        when(categoryService.findAllDto()).thenReturn(categoryDtos);
+        when(categoryService.findAll()).thenReturn(categoryDtos);
         //then
-        ArgumentCaptor<Set<CategoryDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        ArgumentCaptor<Set<Category>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
         String result = categoryController.showCategory(model);
 
         //then
         assertEquals(result,"category/index");
-        verify(categoryService).findAllDto();
+        verify(categoryService).findAll();
         verify(model).addAttribute(eq("categories"), argumentCaptor.capture());
-        Set<CategoryDto> r = argumentCaptor.getValue();
+        Set<Category> r = argumentCaptor.getValue();
         assertEquals(categoryDtos,r);
         assertEquals(2,r.size());
 
@@ -100,7 +98,7 @@ public class CategoryControllerTest {
                 .andExpect(model().attributeExists("category"))
                 .andExpect(view().name(CAT_FORM));
         //when
-        ArgumentCaptor<UnitOfMeasureDto> unitOfMeasureDtoArgumentCaptor = ArgumentCaptor.forClass(UnitOfMeasureDto.class);
+        ArgumentCaptor<UnitOfMeasure> unitOfMeasureDtoArgumentCaptor = ArgumentCaptor.forClass(UnitOfMeasure.class);
         String view = categoryController.showForm(model);
 
         //then
@@ -114,7 +112,7 @@ public class CategoryControllerTest {
     public void editPresent() throws Exception
     {
         //given
-        when(categoryService.findDtoById(anyLong())).thenReturn(new CategoryDto());
+        when(categoryService.findById(anyLong())).thenReturn(Optional.of(new Category()));
 
         //when
         mockMvc.perform(get("/category/1/edit")
@@ -128,7 +126,7 @@ public class CategoryControllerTest {
 
 
         //then
-        verify(categoryService).findDtoById(anyLong());
+        verify(categoryService).findById(anyLong());
     }
 
     @Test
@@ -143,7 +141,7 @@ public class CategoryControllerTest {
     public void editNotPresent() throws Exception
     {
         //given
-        when(categoryService.findDtoById(anyLong())).thenThrow(new NotFoundException(NOT_FOUND));
+        when(categoryService.findById(anyLong())).thenThrow(new NotFoundException(NOT_FOUND));
 
         //when
         mockMvc.perform(get("/category/11/edit"))
@@ -151,7 +149,7 @@ public class CategoryControllerTest {
                 .andExpect(view().name(Error404));
 
         //then
-        verify(categoryService).findDtoById(anyLong());
+        verify(categoryService).findById(anyLong());
 
     }
 
@@ -173,7 +171,7 @@ public class CategoryControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/category"));
 
-        verify(categoryService,times(1)).save(any(CategoryDto.class));
+        verify(categoryService,times(1)).save(any(Category.class));
     }
 
     @Test

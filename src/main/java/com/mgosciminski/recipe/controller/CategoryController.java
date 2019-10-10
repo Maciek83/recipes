@@ -1,7 +1,6 @@
 package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.service.CategoryService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class CategoryController {
     @GetMapping
     public String showCategory(Model model)
     {
-        model.addAttribute("categories",categoryService.findAllDto());
+        model.addAttribute("categories",categoryService.findAll());
 
         return "category/index";
     }
@@ -38,7 +37,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public String showForm(Model model)
     {
-        model.addAttribute("category", new CategoryDto());
+        model.addAttribute("category", new Category());
 
         return CAT_FORM;
     }
@@ -49,28 +48,27 @@ public class CategoryController {
         try { Long.valueOf(id); }
         catch (Exception e) { throw new NotFoundException(NOT_FOUND);}
 
-        CategoryDto categoryDto = categoryService.findDtoById(Long.valueOf(id));
+        Category categoryDto = categoryService.findById(Long.valueOf(id)).orElseThrow(()->new NotFoundException(NOT_FOUND));
         model.addAttribute("category",categoryDto);
 
         return CAT_FORM;
     }
 
     @PostMapping("/new")
-    public String addCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult) throws Exception
+    public String addCategory(@Valid @ModelAttribute("category") Category category, BindingResult bindingResult) throws Exception
     {
         if(bindingResult.hasErrors())
         {
             return CAT_FORM;
         }
 
-        if(categoryDto.getId() == null)
+        if(category.getId() == null)
         {
-            categoryService.save(categoryDto);
+            categoryService.save(category);
         }
         else
         {
-            Category category = categoryService.findByIdPresentOfException(categoryDto.getId());
-            category.setName(categoryDto.getName());
+            category.setName(category.getName());
             categoryService.save(category);
         }
 

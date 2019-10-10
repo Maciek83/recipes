@@ -1,9 +1,7 @@
 package com.mgosciminski.recipe.service;
 
-import com.mgosciminski.recipe.converter.CategoryDtoToCategory;
-import com.mgosciminski.recipe.converter.CategoryToCategoryDto;
+
 import com.mgosciminski.recipe.domain.Category;
-import com.mgosciminski.recipe.model.CategoryDto;
 import com.mgosciminski.recipe.repository.CategoryRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,25 +14,17 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategoryDtoToCategory categoryDtoToCategory;
-    private final CategoryToCategoryDto categoryToCategoryDto;
-
-    private Category nullObject = new Category();
 
     private final String NOT_FOUND = "can't find this id";
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository,
-                               CategoryDtoToCategory categoryDtoToCategory, CategoryToCategoryDto categoryToCategoryDto) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.categoryDtoToCategory = categoryDtoToCategory;
-        this.categoryToCategoryDto = categoryToCategoryDto;
     }
 
     @Override
-    public Iterable<CategoryDto> findAllDto() {
-        List<CategoryDto> categoriesDto = new LinkedList<>();
-        categoryRepository.findAll().forEach(category -> categoriesDto.add(convertCategoryToCategoryDto(category)));
-        return categoriesDto;
+    public Iterable<Category> findAll() {
+
+        return categoryRepository.findAll();
     }
 
     @Override
@@ -52,50 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto findDtoById(Long id) throws NotFoundException {
-
-        Optional<Category> optionalCategory = findById(id);
-
-        return optionalCategory
-                .map(this::convertCategoryToCategoryDto)
-                .orElseThrow(()->new NotFoundException(NOT_FOUND));
-    }
-
-    @Override
     public Category save(Category category) {
 
         Optional<Category> optionalCategory = findByName(category.getName());
 
         return optionalCategory.orElseGet(() -> categoryRepository.save(category));
-    }
-
-    @Override
-    public Category save(CategoryDto categoryDto) {
-
-        Optional<Category> optionalCategory = findByName(categoryDto.getName());
-
-        return optionalCategory.orElseGet(() -> categoryRepository.save(categoryDtoToCategory.convert(categoryDto))) ;
-    }
-
-    @Override
-    public Category edit(CategoryDto categoryDto) {
-
-        Optional<Category> optionalCategory = findById(categoryDto.getId());
-
-        if(optionalCategory.isPresent())
-        {
-            Category category = optionalCategory.get();
-            category.setName(categoryDto.getName());
-            return save(category);
-        }
-        else
-        {
-            nullObject.setName("bad");
-            nullObject.setId(-1L);
-
-            return nullObject;
-        }
-
     }
 
     @Override
@@ -113,8 +64,5 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByName(name);
     }
 
-    @Override
-    public CategoryDto convertCategoryToCategoryDto(Category category) {
-        return categoryToCategoryDto.convert(category);
-    }
+
 }

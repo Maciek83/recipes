@@ -47,7 +47,8 @@
 </div>
 
 <h2>Categories</h2>
-<div th:each="c: ${recipe.categoryDtos}">
+<a th:href="@{'/recipe/' + ${recipe.id} + '/categories'}">Edit</a>
+<div th:each="c: ${recipe.categories}">
     <p th:text="${c.name}"></p>
 </div>
 

@@ -1,13 +1,11 @@
 package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
-import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
 import javassist.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
@@ -16,12 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -65,40 +59,17 @@ public class UnitOfMeasureControllerTest {
     @Test
     public void showUom() throws Exception {
         //given
-        Set<UnitOfMeasureDto> unitOfMeasureDtos = new HashSet<>();
-        unitOfMeasureDtos.add(new UnitOfMeasureDto());
 
-        UnitOfMeasureDto unitOfMeasureDto = new UnitOfMeasureDto();
-        unitOfMeasureDto.setId(1L);
-        unitOfMeasureDto.setUom("kilos");
-        unitOfMeasureDtos.add(unitOfMeasureDto);
 
         //when
-        when(uomService.findAllDto()).thenReturn(unitOfMeasureDtos);
-        ArgumentCaptor<Set<UnitOfMeasureDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
-        String viewName = unitOfMeasureController.showUom(model);
+
 
         //then
-        assertEquals(viewName, "uom/index");
-        verify(uomService).findAllDto();
-        verify(model).addAttribute(eq("uoms"), argumentCaptor.capture());
-        Set<UnitOfMeasureDto> unitOfMeasureSet = argumentCaptor.getValue();
-        assertEquals(2, unitOfMeasureDtos.size());
-        assertEquals(unitOfMeasureDtos, argumentCaptor.getValue());
+
     }
 
     @Test
     public void goToForm() throws Exception {
-        mockMvc.perform(get("/uom/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(UOM_FORM));
-
-        ArgumentCaptor<UnitOfMeasureDto> unitOfMeasureToUomDtoArgumentCaptor = ArgumentCaptor.forClass(UnitOfMeasureDto.class);
-        String value = unitOfMeasureController.showForm(model);
-
-        assertNotNull(value);
-        assertEquals(value, UOM_FORM);
-        verify(model).addAttribute(eq("uom"), unitOfMeasureToUomDtoArgumentCaptor.capture());
 
     }
 
@@ -173,7 +144,7 @@ public class UnitOfMeasureControllerTest {
     public void editExisting() throws Exception
     {
         //given
-        when(uomService.findDtoById(anyLong())).thenReturn(new UnitOfMeasureDto());
+        when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
 
         //when
         mockMvc.perform(get("/uom/1/edit"))
@@ -182,7 +153,7 @@ public class UnitOfMeasureControllerTest {
                 .andExpect(model().attributeExists("uom"));
 
         //then
-        verify(uomService).findDtoById(anyLong());
+        verify(uomService).findById(anyLong());
 
     }
 
@@ -198,7 +169,7 @@ public class UnitOfMeasureControllerTest {
     public void editNull() throws Exception
     {
         //given
-        when(uomService.findDtoById(anyLong())).thenThrow(new NotFoundException("can't find id"));
+        when(uomService.findById(anyLong())).thenThrow(new NotFoundException("can't find id"));
 
         //when
         mockMvc.perform(get("/uom/11/edit"))
@@ -207,7 +178,7 @@ public class UnitOfMeasureControllerTest {
 
 
         //then
-        verify(uomService).findDtoById(anyLong());
+        verify(uomService).findById(anyLong());
 
     }
 

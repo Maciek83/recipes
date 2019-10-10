@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -11,6 +12,7 @@ public class Category{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String name;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)

@@ -1,7 +1,6 @@
 package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
-import com.mgosciminski.recipe.model.UnitOfMeasureDto;
 import com.mgosciminski.recipe.service.UomService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -29,15 +28,16 @@ public class UnitOfMeasureController {
 
     @GetMapping
     public String showUom(Model model) {
-        model.addAttribute("uoms", uomService.findAllDto());
 
+        model.addAttribute("uoms", uomService.findAll());
         return "uom/index";
     }
 
     @GetMapping("/new")
     @ResponseStatus(HttpStatus.OK)
     public String showForm(Model model) {
-        model.addAttribute("uom", new UnitOfMeasureDto());
+
+        model.addAttribute("uom", new UnitOfMeasure());
 
         return UOM_FORM;
     }
@@ -48,24 +48,26 @@ public class UnitOfMeasureController {
         try {Long.valueOf(id); }
         catch (Exception e) { throw new NotFoundException(NOT_FOUND);}
 
-        UnitOfMeasureDto unitOfMeasureDto = uomService.findDtoById(Long.valueOf(id));
+        UnitOfMeasure unitOfMeasureDto = uomService.findById(Long.valueOf(id)).orElseThrow(()->new NotFoundException("not found"));
         model.addAttribute("uom", unitOfMeasureDto);
 
         return UOM_FORM;
     }
 
     @PostMapping({"/new"})
-    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasureDto unitOfMeasureDto, BindingResult bindingResult) throws NotFoundException {
+    public String addUom(@Valid @ModelAttribute("uom") UnitOfMeasure unitOfMeasure, BindingResult bindingResult) throws NotFoundException {
 
         if (bindingResult.hasErrors()) {
             return UOM_FORM;
         }
 
-        if (unitOfMeasureDto.getId() == null) {
-            uomService.save(unitOfMeasureDto);
+        if (unitOfMeasure.getId() == null) {
+
+            uomService.save(unitOfMeasure);
+
         } else {
-            UnitOfMeasure unitOfMeasure = uomService.findByIdPresentOrException(unitOfMeasureDto.getId());
-            unitOfMeasure.setUom(unitOfMeasureDto.getUom());
+
+            unitOfMeasure.setDescription(unitOfMeasure.getDescription());
             uomService.save(unitOfMeasure);
         }
 

@@ -11,21 +11,29 @@ public class DataLoader implements CommandLineRunner {
 
     private final RecipeService recipeService;
     private final UomService uomService;
+    private final CategoryService categoryService;
 
 
-    public DataLoader(RecipeService recipeService, UomService uomService) {
+    public DataLoader(RecipeService recipeService, UomService uomService, CategoryService categoryService) {
 
         this.recipeService = recipeService;
 
         this.uomService = uomService;
+        this.categoryService = categoryService;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
         UnitOfMeasure unitOfMeasure1 = new UnitOfMeasure();
-        unitOfMeasure1.setUom("blelbuszka");
+        unitOfMeasure1.setDescription("blelbuszka");
         uomService.save(unitOfMeasure1);
+
+        Category category2 = new Category();
+        category2.setName("kategoria nie dodana");
+
+        categoryService.save(category2);
+
 
         Recipe recipe = new Recipe();
         recipe.setDescription("bobobobo");
@@ -37,7 +45,7 @@ public class DataLoader implements CommandLineRunner {
         recipe.setDirections("dssdfs");
         recipe.setDifficulty(Difficulty.HARD);
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
-        unitOfMeasure.setUom("uom");
+        unitOfMeasure.setDescription("uom");
         Ingredient ingredient = new Ingredient();
         ingredient.setDescription("cosik");
         ingredient.setRecipe(recipe);

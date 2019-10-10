@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Edit categories</h2>
+
+<form th:object="${recipe}" th:action="@{/recipe/__${recipe.id}__/categories/}" method="post">
+    <label>
+
+        <span th:each="c : ${allcategories}">
+        <input type="checkbox" name="id" th:field="*{categories}" th:value="${c.id}">
+            <span th:text="${c.name}"></span>
+        </span>
+
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
