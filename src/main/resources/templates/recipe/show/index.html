@@ -37,7 +37,9 @@
 </table>
 
 <h2>Notes</h2>
-<p th:text="${recipe.notes.notes}"></p>
+<a th:href="@{'/recipe/'+${recipe.id}+'/note'}">Edit</a>
+
+<p th:if="${recipe.notes != null}" th:text="${recipe.notes.description}"></p>
 
 <h2>Ingredients</h2>
 <a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/add'}">Add</a>

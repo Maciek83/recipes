@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,13 +10,18 @@ public class Ingredient{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
+    @Size(min=2, max=30)
     private String description;
+    @Min(1)
+    @Max(1000)
     private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Recipe recipe;
 
-    @ManyToOne (fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @NotNull
+    @ManyToOne (fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     private UnitOfMeasure unitOfMeasure;
 
     public Long getId() {

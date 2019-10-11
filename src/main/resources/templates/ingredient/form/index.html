@@ -6,12 +6,12 @@
 </head>
 <body>
 <h2>Add Ingredient</h2>
-<form th:object="${ingredient}" th:action="@{/recipe/__${ingredient.recipeId}__/ingredient/add/}" method="post">
+<form th:object="${ingredient}" th:action="@{/recipe/__${recipe.id}__/ingredient/add}" method="post">
     <label>
-        <input type="text" th:field="*{description}"/>
-        <input type="text" th:field="*{amount}"/>
-        <select th:field="*{unitOfMeasure}" >
-            <option th:each="u: ${uoms}" th:value="${u.description}" th:text="${u.description}"></option>
+        <input type="text" th:field="${ingredient.description}"/>
+        <input type="text" th:field="${ingredient.amount}"/>
+        <select name="u.id" th:field="${ingredient.unitOfMeasure}" >
+            <option th:each="u: ${uoms}" th:value="${{u.id}}" th:text="${u.description}"></option>
         </select>
     </label>
     <button type="submit">Submit</button>

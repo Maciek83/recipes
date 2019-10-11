@@ -22,7 +22,7 @@ public class Recipe{
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "recipe")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE,mappedBy = "recipe")
     private Note notes;
 
 

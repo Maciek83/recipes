@@ -51,10 +51,10 @@ public class DataLoader implements CommandLineRunner {
         ingredient.setRecipe(recipe);
         ingredient.setUnitOfMeasure(unitOfMeasure);
         recipe.getIngredients().add(ingredient);
-        Note note = new Note();
-        note.setNotes("notes");
-        recipe.setNotes(note);
-        note.setRecipe(recipe);
+//        Note note = new Note();
+//        note.setDescription("notesnotensnejskens");
+//        recipe.setNotes(note);
+//        note.setRecipe(recipe);
         Category category = new Category();
         category.setName("kategory");
         recipe.getCategories().add(category);

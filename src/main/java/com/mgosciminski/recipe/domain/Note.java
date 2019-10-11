@@ -1,6 +1,7 @@
 package com.mgosciminski.recipe.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -10,7 +11,8 @@ public class Note{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
-    private String notes;
+    @NotBlank
+    private String description;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Recipe recipe;
@@ -23,12 +25,12 @@ public class Note{
         this.id = id;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Recipe getRecipe() {
@@ -44,11 +46,11 @@ public class Note{
         if (this == o) return true;
         if (!(o instanceof Note)) return false;
         Note note = (Note) o;
-        return Objects.equals(notes, note.notes);
+        return Objects.equals(description, note.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(notes);
+        return Objects.hash(description);
     }
 }
