@@ -1,10 +1,7 @@
 package com.mgosciminski.recipe.controller;
 
 
-import com.mgosciminski.recipe.domain.Ingredient;
-import com.mgosciminski.recipe.domain.Note;
-import com.mgosciminski.recipe.domain.Recipe;
-import com.mgosciminski.recipe.domain.UnitOfMeasure;
+import com.mgosciminski.recipe.domain.*;
 import com.mgosciminski.recipe.service.*;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -46,19 +43,23 @@ public class RecipeController {
         return "recipe/index";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/add")
     public String gotoFormAddNew(Model model) {
-        model.addAttribute("recipe", new Recipe());
 
+        model.addAttribute("diff", Difficulty.values());
+        model.addAttribute("recipe", new Recipe());
         return REC_FORM;
     }
 
-    @PostMapping("/new")
-    public String addNewRecipe(@Valid @ModelAttribute Recipe recipeDto, BindingResult bindingResult) throws Exception {
+    @PostMapping("/add")
+    public String addNewRecipe(@Valid @ModelAttribute Recipe recipe, BindingResult bindingResult, Model model) throws Exception {
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("diff", Difficulty.values());
             return REC_FORM;
-        } else {
-            recipeService.save(recipeDto);
+        }
+        else {
+            recipeService.save(recipe);
 
             return "redirect:/recipe";
         }
@@ -123,9 +124,11 @@ public class RecipeController {
     }
 
     @PostMapping("/{id}/categories")
-    public String editCategories(@PathVariable String id, @ModelAttribute Recipe recipe) {
+    public String editCategories(@PathVariable String id, @ModelAttribute Recipe recipe) throws NotFoundException {
 
-        recipeService.save(recipe);
+        Recipe recipeFromDb = recipeService.findById(Long.valueOf(id));
+        recipeFromDb.setCategories(recipe.getCategories());
+        recipeService.save(recipeFromDb);
 
         return "redirect:/recipe/" + id;
     }
@@ -148,7 +151,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/note")
-    public String gotoEditOrAddNoteForm(@PathVariable String id, Model model) throws NotFoundException {
+    public String gotoEditNoteForm(@PathVariable String id, Model model) throws NotFoundException {
 
         Recipe recipe = recipeService.findById(Long.valueOf(id));
 
@@ -157,32 +160,56 @@ public class RecipeController {
             note.setDescription("Add description");
             note.setRecipe(recipe);
             recipe.setNotes(note);
-            model.addAttribute("recipe", recipe);
+            model.addAttribute("recipe",recipe);
+            model.addAttribute("note", recipe.getNotes());
         } else {
-
-            model.addAttribute("recipe", recipe);
+            model.addAttribute("recipe",recipe);
+            model.addAttribute("note", recipe.getNotes());
         }
 
         return "recipe/editNote/index";
     }
 
     @PostMapping("/{id}/note")
-    public String addNotePost(@PathVariable String id, @Valid @ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult) throws NotFoundException {
-
-        if(bindingResult.hasErrors())
-        {
-            return "recipe/editNote/index";
-        }
+    public String addNotePost(@PathVariable String id, @Valid @ModelAttribute("note") Note note, BindingResult bindingResult, Model model) throws NotFoundException {
 
         Recipe recipeFromDb = recipeService.findById(Long.valueOf(id));
 
-        Note note = recipe.getNotes();
+        if(bindingResult.hasErrors())
+        {
+            model.addAttribute("recipe",recipeFromDb);
+            return "recipe/editNote/index";
+        }
+
         note.setRecipe(recipeFromDb);
         Note noteFromDb = noteService.save(note);
 
         recipeFromDb.setNotes(noteFromDb);
 
         recipeService.save(recipeFromDb);
+
+        return "redirect:/recipe/" + id;
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editRecipeGoToForm(@PathVariable String id,Model model) throws NotFoundException {
+
+        model.addAttribute("recipe",recipeService.findById(Long.valueOf(id)));
+        model.addAttribute("diff", Difficulty.values());
+
+        return "recipe/edit/index";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editRecipeSubmit(@PathVariable String id, @Valid @ModelAttribute Recipe recipe,BindingResult bindingResult, Model model) throws NotFoundException {
+
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("diff", Difficulty.values());
+            return "recipe/edit/index";
+        }
+
+        recipeService.edit(recipe);
 
         return "redirect:/recipe/" + id;
     }

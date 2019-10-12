@@ -5,9 +5,9 @@
     <title>View recipe</title>
 </head>
 <body>
-
+<a th:href="@{'/recipe/'}">Back to recipes</a>
 <h2>Recipes</h2>
-
+<a th:href="@{'/recipe/'+${recipe.id}+'/edit'}">Edit</a>
 <table>
     <thead>
     <tr>
@@ -19,7 +19,6 @@
         <th>Url</th>
         <th>Directions</th>
         <th>Difficulty</th>
-        <th>Note</th>
     </tr>
     </thead>
     <tbody>

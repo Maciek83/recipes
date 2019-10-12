@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Add new recipe</h2>
+<a th:href="@{'/recipe/'+${recipe.id}}">Back to recipe</a>
+<form th:object="${recipe}" th:action="@{/recipe/__${recipe.id}__/edit}" method="post">
+    <label>
+        <input type="text" th:field="*{description}">
+        <input type="text" th:field="*{prepTime}">
+        <input type="text" th:field="*{cookTime}">
+        <input type="text" th:field="*{servings}">
+        <input type="text" th:field="*{source}">
+        <input type="text" th:field="*{url}">
+        <textarea type="text" th:field="*{directions}"></textarea>
+        <select th:field = "*{difficulty}">
+            <option th:each="d: ${diff}" th:value="${d}" th:text="${d.toString()}" th:selected="(${diff}==${recipe.difficulty})"></option>
+        </select>
+    </label>
+    <button type="submit">Submit</button>
+    <div th:if="${#fields.hasErrors('*')}">
+        <p>Please Correct Errors Below</p>
+        <span th:if="${#fields.hasErrors('description')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('prepTime')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('prepTime')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('cookTime')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('cookTime')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('servings')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('servings')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('source')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('source')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('url')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('directions')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('directions')}" th:text="${err}"></li>
+            </ul>
+        </span>
+        <span th:if="${#fields.hasErrors('difficulty')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('difficulty')}" th:text="${err}"></li>
+            </ul>
+        </span>
+    </div>
+</form>
+
+</body>
+</html>

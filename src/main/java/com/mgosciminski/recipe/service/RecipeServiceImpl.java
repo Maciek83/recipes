@@ -20,6 +20,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe save(Recipe recipe) {
+
         return repository.save(recipe);
     }
 
@@ -47,5 +48,22 @@ public class RecipeServiceImpl implements RecipeService {
 
         repository.deleteById(id);
     }
+
+    @Override
+    public Recipe edit(Recipe recipe) throws NotFoundException {
+
+        Recipe recipeFromDb = findById(recipe.getId());
+        recipeFromDb.setDescription(recipe.getDescription());
+        recipeFromDb.setPrepTime(recipe.getPrepTime());
+        recipeFromDb.setCookTime(recipe.getCookTime());
+        recipeFromDb.setServings(recipe.getServings());
+        recipeFromDb.setSource(recipe.getSource());
+        recipeFromDb.setUrl(recipe.getUrl());
+        recipeFromDb.setDirections(recipe.getDirections());
+        recipeFromDb.setDifficulty(recipe.getDifficulty());
+
+        return save(recipeFromDb);
+    }
+
 
 }

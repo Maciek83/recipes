@@ -1,6 +1,9 @@
 package com.mgosciminski.recipe.domain;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -11,18 +14,36 @@ public class Recipe{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
+    @Size(min=2, max=100)
     private String description;
+    @NotNull
+    @Min(1)
+    @Max(1000)
     private Integer prepTime;
+    @NotNull
+    @Min(1)
+    @Max(1000)
     private Integer cookTime;
+    @NotNull
+    @Min(1)
+    @Max(1000)
     private Integer servings;
+    @NotBlank
+    @Size(min=2, max=100)
     private String source;
+    @NotBlank
+    @Size(min=2, max=100)
+    @URL
     private String url;
     @Lob
+    @NotBlank
+    @Size(min=2, max=100)
     private String directions;
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE,mappedBy = "recipe")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "recipe")
     private Note notes;
 
 

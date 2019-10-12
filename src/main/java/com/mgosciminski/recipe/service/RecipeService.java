@@ -12,5 +12,6 @@ public interface RecipeService {
     Recipe findById(Long id) throws NotFoundException;
     void delete(Recipe recipe);
     void deleteById(Long id);
+    Recipe edit(Recipe recipe) throws NotFoundException;
 
 }

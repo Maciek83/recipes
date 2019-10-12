@@ -41,7 +41,7 @@ public class DataLoader implements CommandLineRunner {
         recipe.setCookTime(100);
         recipe.setServings(12);
         recipe.setSource("dddd");
-        recipe.setUrl("fdss");
+        recipe.setUrl("http://cosik.pl");
         recipe.setDirections("dssdfs");
         recipe.setDifficulty(Difficulty.HARD);
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
