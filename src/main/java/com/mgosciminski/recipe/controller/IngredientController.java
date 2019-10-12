@@ -2,6 +2,7 @@ package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.Ingredient;
 import com.mgosciminski.recipe.service.IngredientService;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +20,12 @@ public class IngredientController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteIngredient(@PathVariable String id)
-    {
+    public String deleteIngredient(@PathVariable String id) throws NotFoundException {
         Ingredient ingredient = ingredientService.findById(Long.valueOf(id));
+        Long recipeId = ingredient.getRecipe().getId();
         ingredientService.delete(ingredient);
 
-        return "redirect:/recipe/"+ id +"/ingredients";
+        return "redirect:/recipe/"+ recipeId +"/ingredients";
     }
 
 }

@@ -38,6 +38,7 @@ public class RecipeController {
 
     @GetMapping
     public String showRecipes(Model model) {
+
         model.addAttribute("recipes", recipeService.findAll());
 
         return "recipe/index";
@@ -84,9 +85,8 @@ public class RecipeController {
 
     @GetMapping("/{id}/ingredient/add")
     public String goToFormAddIngredient(@PathVariable String id, Model model) throws NotFoundException {
+
         Ingredient ingredient = new Ingredient();
-        ingredient.setUnitOfMeasure(new UnitOfMeasure());
-        ingredient.setRecipe(recipeService.findById(Long.valueOf(id)));
         model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
         model.addAttribute("ingredient", ingredient);
         model.addAttribute("uoms", uomService.findAll());
@@ -98,15 +98,21 @@ public class RecipeController {
     public String addIngredient(Model model, @PathVariable String id, @Valid @ModelAttribute("ingredient") Ingredient ingredient, BindingResult bindingResult) throws NotFoundException {
 
         if (bindingResult.hasErrors()) {
+
             model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
             model.addAttribute("uoms", uomService.findAll());
             System.out.println("oop");
             return "ingredient/form/index";
         }
 
+        Ingredient newIngredient = new Ingredient();
+        newIngredient.setDescription(ingredient.getDescription());
+        newIngredient.setUnitOfMeasure(ingredient.getUnitOfMeasure());
+
         Recipe recipe = recipeService.findById(Long.valueOf(id));
-        Ingredient ingredientSaved = ingredientService.save(ingredient);
-        ingredientSaved.setRecipe(recipe);
+        newIngredient.setRecipe(recipe);
+
+        Ingredient ingredientSaved = ingredientService.save(newIngredient);
         recipe.getIngredients().add(ingredientSaved);
         recipeService.save(recipe);
 
@@ -212,6 +218,14 @@ public class RecipeController {
         recipeService.edit(recipe);
 
         return "redirect:/recipe/" + id;
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteRecipe(@PathVariable String id)
+    {
+        recipeService.deleteById(Long.valueOf(id));
+
+        return "redirect:/recipe";
     }
 
     @ExceptionHandler({NotFoundException.class, NumberFormatException.class})

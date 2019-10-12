@@ -174,34 +174,4 @@ public class CategoryControllerTest {
         verify(categoryService,times(1)).save(any(Category.class));
     }
 
-    @Test
-    public void addCategoryWithIdAndPresent() throws Exception
-    {
-        when(categoryService.findByIdPresentOfException(anyLong())).thenReturn(new Category());
-
-        mockMvc.perform(post("/category/new")
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("name","myName")
-                .param("id","1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/category"));
-
-        verify(categoryService).findByIdPresentOfException(anyLong());
-        verify(categoryService,times(1)).save(any(Category.class));
-    }
-
-    @Test
-    public void addCategoryWithIdButNotPresent()throws Exception
-    {
-        when(categoryService.findByIdPresentOfException(anyLong())).thenThrow(new NotFoundException(NOT_FOUND));
-
-        mockMvc.perform(post("/category/new")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("name","myName")
-                .param("id","1"))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name(Error404));
-
-        verify(categoryService).findByIdPresentOfException(anyLong());
-    }
 }

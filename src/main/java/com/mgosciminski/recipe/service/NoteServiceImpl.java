@@ -5,12 +5,11 @@ import com.mgosciminski.recipe.repository.NoteRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
+    private final String NOT_FOUND = "can't find this id";
 
 
     public NoteServiceImpl(NoteRepository noteRepository) {
@@ -23,7 +22,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note findById(Long id) throws NotFoundException {
 
-        return noteRepository.findById(id).orElseThrow(()->new NotFoundException("not found"));
+        return noteRepository.findById(id).orElseThrow(()-> new NotFoundException(NOT_FOUND));
     }
 
     @Override
@@ -40,7 +39,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
+
         noteRepository.deleteById(id);
     }
 

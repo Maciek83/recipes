@@ -5,7 +5,6 @@ import com.mgosciminski.recipe.repository.RecipeRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
@@ -64,6 +63,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         return save(recipeFromDb);
     }
+
 
 
 }

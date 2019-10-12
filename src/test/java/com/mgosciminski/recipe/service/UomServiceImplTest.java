@@ -29,7 +29,6 @@ public class UomServiceImplTest {
     @Mock
     private UomRepository uomRepository;
 
-
     @InjectMocks
     private UomServiceImpl uomService;
 
@@ -58,13 +57,13 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void findByUom() throws Exception
+    public void findByDescription() throws Exception
     {
         //given
         Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.of(new UnitOfMeasure());
+        when(uomRepository.findByDescription(anyString())).thenReturn(unitOfMeasureOptional);
 
         //when
-        when(uomRepository.findByDescription(anyString())).thenReturn(unitOfMeasureOptional);
         Optional<UnitOfMeasure> unitOfMeasure = uomService.findByDescription("aa");
 
         //then
@@ -75,13 +74,13 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void findByUomEmpty() throws Exception
+    public void findByDescriptionEmpty() throws Exception
     {
         //given
         Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.empty();
+        when(uomRepository.findByDescription(anyString())).thenReturn(unitOfMeasureOptional);
 
         //when
-        when(uomRepository.findByDescription(anyString())).thenReturn(unitOfMeasureOptional);
         Optional<UnitOfMeasure> unitOfMeasure = uomService.findByDescription("aa");
 
         //then
@@ -96,14 +95,14 @@ public class UomServiceImplTest {
         //given
         when(uomRepository.findAll()).thenReturn(unitOfMeasures);
 
-
         //when
-
-
+        Set<UnitOfMeasure> result = (Set<UnitOfMeasure>) uomRepository.findAll();
 
         //then
-
-        verify(uomRepository,times(1)).findAll();
+        assertNotNull(result);
+        assertEquals(result,unitOfMeasures);
+        assertEquals(result.size(),2);
+        verify(uomRepository).findAll();
 
     }
 
@@ -124,27 +123,6 @@ public class UomServiceImplTest {
     }
 
     @Test
-    public void saveWhenDontExist() throws Exception
-    {
-
-        //given
-
-        UnitOfMeasure ofMeasureToSave = new UnitOfMeasure();
-
-        //when
-        doReturn(Optional.empty()).when(uomServiceSpy).findByDescription(anyString());
-        when(uomRepository.save(any())).thenReturn(ofMeasureToSave);
-
-
-
-        //then
-
-
-        verify(uomServiceSpy).findByDescription(anyString());
-        verify(uomRepository).save(any());
-    }
-
-    @Test
     public void delete() throws Exception {
         //when
         uomService.delete(new UnitOfMeasure());
@@ -155,6 +133,7 @@ public class UomServiceImplTest {
 
     @Test
     public void deleteById() throws Exception {
+
         //when
         uomService.delete(1L);
 
@@ -177,98 +156,13 @@ public class UomServiceImplTest {
         assertEquals(result,unitOfMeasureOptional);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void findByIdDtoNotPresent() throws Exception
-    {
-        //given
-        doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
-
-        //when
-        uomServiceSpy.findById(1L);
-
-        //then
-        verify(uomServiceSpy).findById(anyLong());
-        thrown.expect(NotFoundException.class);
-        thrown.expectMessage(NOT_FOUND);
-    }
-
-    @Test
-    public void findByIdDtoPresent() throws Exception
-    {
-        //given
-        doReturn(Optional.of(new UnitOfMeasure())).when(uomServiceSpy).findById(anyLong());
-
-        //when
-
-
-        //then
-
-        verify(uomServiceSpy).findById(anyLong());
-
-    }
-
-    @Test
-    public void convertToDto() throws Exception
-    {
-        //given
-        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
-        unitOfMeasure.setId(1L);
-        unitOfMeasure.setDescription("item");
-
-
-        //when
-
-
-        //then
-
-
-
-    }
-
-    @Test
-    public void editPresent() throws Exception
-    {
-        //given
-        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
-        unitOfMeasure.setId(1L);
-
-
-        doReturn(Optional.of(unitOfMeasure)).when(uomServiceSpy).findById(anyLong());
-        doReturn(unitOfMeasure).when(uomServiceSpy).save(any(UnitOfMeasure.class));
-
-        //when
-
-
-        //then
-
-
-        verify(uomServiceSpy).findById(anyLong());
-        verify(uomServiceSpy).save(any(UnitOfMeasure.class));
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void editNotPresent() throws Exception
-    {
-        //given
-
-        doReturn(Optional.empty()).when(uomServiceSpy).findById(anyLong());
-
-        //when
-
-
-        //then
-        verify(uomServiceSpy).findById(anyLong());
-        thrown.expect(NotFoundException.class);
-        thrown.expectMessage(NOT_FOUND);
-
-    }
-
     @Test
     public void findByIdPresent() throws Exception
     {
         //given
         Optional<UnitOfMeasure> unitOfMeasure = Optional.of(new UnitOfMeasure());
         doReturn(unitOfMeasure).when(uomServiceSpy).findById(anyLong());
+
         //when
         UnitOfMeasure result = uomServiceSpy.findByIdPresentOrException(1L);
 
@@ -290,5 +184,21 @@ public class UomServiceImplTest {
         verify(uomServiceSpy).findById(anyLong());
         thrown.expect(NotFoundException.class);
         thrown.expectMessage(NOT_FOUND);
+    }
+
+    @Test
+    public void edit() throws Exception
+    {
+        //given
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        doReturn(unitOfMeasure).when(uomServiceSpy).save(any());
+
+        //when
+        UnitOfMeasure result = uomServiceSpy.edit(new UnitOfMeasure());
+
+        //then
+        assertEquals(result,unitOfMeasure);
+        verify(uomServiceSpy).edit(any());
+
     }
 }

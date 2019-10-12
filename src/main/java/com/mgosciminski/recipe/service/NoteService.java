@@ -8,5 +8,5 @@ public interface NoteService {
     Iterable<Note> findAll();
     Note findById(Long id) throws NotFoundException;
     Note save(Note note) throws NotFoundException;
-    void delete(Long id);
+    void deleteById(Long id);
 }

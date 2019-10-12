@@ -35,9 +35,8 @@ public class UomServiceImpl implements UomService {
 
     @Override
     public UnitOfMeasure findByIdPresentOrException(Long id) throws NotFoundException {
-        return findById(id).orElseThrow(()-> new NotFoundException(NOT_FOUND));
+        return findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND));
     }
-
 
     @Override
     public UnitOfMeasure save(UnitOfMeasure unitOfMeasure) {
@@ -58,9 +57,9 @@ public class UomServiceImpl implements UomService {
     }
 
     @Override
-    public UnitOfMeasure edit(UnitOfMeasure unitOfMeasureDto) throws NotFoundException {
+    public UnitOfMeasure edit(UnitOfMeasure unitOfMeasure) throws NotFoundException {
 
-        return save(unitOfMeasureDto);
+        return save(unitOfMeasure);
     }
 
 }

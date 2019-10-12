@@ -48,8 +48,8 @@ public class CategoryController {
         try { Long.valueOf(id); }
         catch (Exception e) { throw new NotFoundException(NOT_FOUND);}
 
-        Category categoryDto = categoryService.findById(Long.valueOf(id)).orElseThrow(()->new NotFoundException(NOT_FOUND));
-        model.addAttribute("category",categoryDto);
+        Category category = categoryService.findById(Long.valueOf(id)).orElseThrow(()->new NotFoundException(NOT_FOUND));
+        model.addAttribute("category",category);
 
         return CAT_FORM;
     }

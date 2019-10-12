@@ -15,7 +15,7 @@
         <input type="text" th:field="*{servings}">
         <input type="text" th:field="*{source}">
         <input type="text" th:field="*{url}">
-        <input type="text" th:field="*{directions}">
+        <textarea type="text" th:field="*{directions}"></textarea>
         <select th:field = "*{difficulty}">
             <option th:each="d: ${diff}" th:value="${d}" th:text="${d.toString()}"></option>
         </select>

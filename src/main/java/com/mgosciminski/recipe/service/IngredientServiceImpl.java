@@ -3,6 +3,7 @@ package com.mgosciminski.recipe.service;
 
 import com.mgosciminski.recipe.domain.Ingredient;
 import com.mgosciminski.recipe.repository.IngredientRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,9 +12,7 @@ import java.util.Optional;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
-
-    private final Ingredient nullObject = new Ingredient();
-    private final String BAD = "bad";
+    private final String NOT_FOUND = "can't find this id";
 
 
     public IngredientServiceImpl(IngredientRepository ingredientRepository) {
@@ -31,16 +30,11 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient findById(Long id) {
+    public Ingredient findById(Long id) throws NotFoundException {
 
         Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
 
-        if (optionalIngredient.isPresent()) {
-            return optionalIngredient.get();
-        } else {
-            nullObject.setDescription(BAD);
-            return nullObject;
-        }
+        return optionalIngredient.orElseThrow(()-> new NotFoundException(NOT_FOUND));
     }
 
     @Override
