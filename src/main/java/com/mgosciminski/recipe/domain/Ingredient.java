@@ -17,10 +17,9 @@ public class Ingredient{
     @Max(1000)
     private BigDecimal amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Recipe recipe;
 
-    @NotNull
     @ManyToOne (fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     private UnitOfMeasure unitOfMeasure;
 

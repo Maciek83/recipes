@@ -7,12 +7,9 @@
 <body>
 
 <h2>Ingredients</h2>
-<span th:if="${ingredients.size()>0}">
-    <a th:href="@{'/recipe/' + ${ingredients.get(0).recipe.id}}">Back To Recipe</a>
-</span>
-<span th:if="${ingredients.size()==0}">
-    <a th:href="@{'/recipe'}">Back To Recipes</a>
-</span>
+
+<a th:href="@{'/recipe/' + ${recipe.id}}">Back To Recipe</a>
+
 <div th:each="i : ${ingredients}">
     <span th:text="${i.description}"></span>
     <span th:text="${i.unitOfMeasure.description}"></span>

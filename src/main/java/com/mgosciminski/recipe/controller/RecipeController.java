@@ -68,26 +68,40 @@ public class RecipeController {
 
     @GetMapping("/{id}/ingredients")
     public String showIngredients(@PathVariable String id, Model model) throws NotFoundException {
+
         try {
             Long.valueOf(id);
         } catch (NumberFormatException e) {
             throw new NotFoundException(NOT_FOUND);
         }
 
-        Set<Ingredient> ingredients = recipeService.findById(Long.valueOf(id)).getIngredients();
+        Recipe recipe = recipeService.findById(Long.valueOf(id));
+        Set<Ingredient> ingredients = recipe.getIngredients();
 
         List<Ingredient> ingredientList = List.copyOf(ingredients);
 
+        model.addAttribute("recipe", recipe);
         model.addAttribute("ingredients", ingredientList);
 
         return "recipe/editIngredients/index";
     }
 
     @GetMapping("/{id}/ingredient/add")
-    public String goToFormAddIngredient(@PathVariable String id, Model model) throws NotFoundException {
+    public String goToFormAddIngredient(@PathVariable String id, Model model) throws Exception {
+
+        Recipe recipe = null;
+
+        try {
+
+            recipe = recipeService.findById(Long.valueOf(id));
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
 
         Ingredient ingredient = new Ingredient();
-        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
+        model.addAttribute("recipe", recipe);
         model.addAttribute("ingredient", ingredient);
         model.addAttribute("uoms", uomService.findAll());
 
@@ -97,11 +111,19 @@ public class RecipeController {
     @PostMapping("/{id}/ingredient/add")
     public String addIngredient(Model model, @PathVariable String id, @Valid @ModelAttribute("ingredient") Ingredient ingredient, BindingResult bindingResult) throws NotFoundException {
 
+        try{
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
             model.addAttribute("uoms", uomService.findAll());
-            System.out.println("oop");
+
             return "ingredient/form/index";
         }
 
@@ -122,17 +144,29 @@ public class RecipeController {
     @GetMapping("/{id}/categories")
     public String editCategoriesForm(Model model, @PathVariable String id) throws NotFoundException {
 
-        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
-        model.addAttribute("recipeCat", recipeService.findById(Long.valueOf(id)).getCategories());
+        Recipe recipe = null;
+
+        try{
+            recipe = recipeService.findById(Long.valueOf(id));
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("recipeCat", recipe.getCategories());
         model.addAttribute("allcategories", categoryService.findAll());
 
         return "recipe/editCategories/index";
     }
 
     @PostMapping("/{id}/categories")
-    public String editCategories(@PathVariable String id, @ModelAttribute Recipe recipe) throws NotFoundException {
+    public String editCategories(@PathVariable String id, @ModelAttribute Recipe recipe) throws Exception {
 
         Recipe recipeFromDb = recipeService.findById(Long.valueOf(id));
+
         recipeFromDb.setCategories(recipe.getCategories());
         recipeService.save(recipeFromDb);
 
@@ -149,15 +183,23 @@ public class RecipeController {
             throw new NotFoundException(NOT_FOUND);
         }
 
-        Recipe recipeDtoDisplay = recipeService.findById(Long.valueOf(id));
+        Recipe recipe = recipeService.findById(Long.valueOf(id));
 
-        model.addAttribute("recipe", recipeDtoDisplay);
+        model.addAttribute("recipe", recipe);
 
         return "recipe/show/index";
     }
 
     @GetMapping("/{id}/note")
     public String gotoEditNoteForm(@PathVariable String id, Model model) throws NotFoundException {
+
+        try {
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
 
         Recipe recipe = recipeService.findById(Long.valueOf(id));
 
@@ -178,6 +220,14 @@ public class RecipeController {
 
     @PostMapping("/{id}/note")
     public String addNotePost(@PathVariable String id, @Valid @ModelAttribute("note") Note note, BindingResult bindingResult, Model model) throws NotFoundException {
+
+        try{
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
 
         Recipe recipeFromDb = recipeService.findById(Long.valueOf(id));
 
@@ -200,6 +250,15 @@ public class RecipeController {
     @GetMapping("/{id}/edit")
     public String editRecipeGoToForm(@PathVariable String id,Model model) throws NotFoundException {
 
+        try
+        {
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
         model.addAttribute("recipe",recipeService.findById(Long.valueOf(id)));
         model.addAttribute("diff", Difficulty.values());
 
@@ -208,6 +267,16 @@ public class RecipeController {
 
     @PostMapping("/{id}/edit")
     public String editRecipeSubmit(@PathVariable String id, @Valid @ModelAttribute Recipe recipe,BindingResult bindingResult, Model model) throws NotFoundException {
+
+        try
+        {
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
 
         if (bindingResult.hasErrors())
         {
@@ -221,8 +290,16 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteRecipe(@PathVariable String id)
-    {
+    public String deleteRecipe(@PathVariable String id) throws NotFoundException {
+        try
+        {
+            Long.valueOf(id);
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
         recipeService.deleteById(Long.valueOf(id));
 
         return "redirect:/recipe";

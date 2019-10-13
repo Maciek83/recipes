@@ -10,11 +10,15 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -138,22 +142,6 @@ public class CategoryControllerTest {
     }
 
     @Test
-    public void editNotPresent() throws Exception
-    {
-        //given
-        when(categoryService.findById(anyLong())).thenThrow(new NotFoundException(NOT_FOUND));
-
-        //when
-        mockMvc.perform(get("/category/11/edit"))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name(Error404));
-
-        //then
-        verify(categoryService).findById(anyLong());
-
-    }
-
-    @Test
     public void addCategoryWithBugs() throws Exception
     {
         mockMvc.perform(post("/category/new")
@@ -174,4 +162,22 @@ public class CategoryControllerTest {
         verify(categoryService,times(1)).save(any(Category.class));
     }
 
+    @Test
+    public void addCategoryWithId() throws Exception
+    {
+        mockMvc.perform(post("/category/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("name","myName")
+                .param("id","1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/category"));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleNotFound() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Error404);
+        return modelAndView;
+    }
 }

@@ -2,10 +2,10 @@ package com.mgosciminski.recipe.controller;
 
 import com.mgosciminski.recipe.domain.UnitOfMeasure;
 import com.mgosciminski.recipe.service.UomService;
-import javassist.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 
 import java.util.Optional;
 
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,6 +49,15 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
+    public void showForm() throws Exception {
+
+        mockMvc.perform(get("/uom/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("uom"))
+                .andExpect(view().name(UOM_FORM));
+    }
+
+    @Test
     public void testMockMCV() throws Exception {
 
 
@@ -57,92 +67,55 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
-    public void showUom() throws Exception {
-        //given
-
-
-        //when
-
-
-        //then
-
-    }
-
-    @Test
-    public void goToForm() throws Exception {
-
-    }
-
-    @Test
-    public void addNewUomErrors() throws Exception
-    {
+    public void addNewUomErrors() throws Exception {
         mockMvc.perform(post("/uom/new")
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(view().name(UOM_FORM));
     }
 
     @Test
-    public void addNewUomOkIdNull() throws Exception {
+    public void addNewUomEmptyData() throws Exception {
         mockMvc.perform(post("/uom/new")
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("uom","unit"))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("description", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name(UOM_FORM))
+        ;
+    }
+
+    @Test
+    public void addUomNoId() throws Exception {
+        //when
+        mockMvc.perform(post("/uom/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("description", "opis")
+        )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/uom"));
-    }
-
-    @Test
-    public void addNewUomIdNotNull()throws Exception
-    {
-        //given
-        when(uomService.findByIdPresentOrException(anyLong())).thenReturn(new UnitOfMeasure());
-        when(uomService.save(any(UnitOfMeasure.class))).thenReturn(new UnitOfMeasure());
-
-        //when
-        mockMvc.perform(post("/uom/new")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("uom","unit")
-                .param("id","1")
-                )
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/uom"));
 
         //then
-        verify(uomService).findByIdPresentOrException(anyLong());
-        verify(uomService).save(any(UnitOfMeasure.class));
+        verify(uomService).save(any());
     }
 
     @Test
-    public void addNewUomIdNotNullButOptionalNull()throws Exception
+    public void addUomId() throws Exception
     {
-        //given
-        when(uomService.findByIdPresentOrException(anyLong())).thenThrow(new NotFoundException(Error404));
-
         //when
         mockMvc.perform(post("/uom/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("uom","unit")
                 .param("id","1")
+                .param("description", "opis")
         )
-                .andExpect(status().isNotFound())
-                .andExpect(view().name(Error404));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/uom"));
 
         //then
-        verify(uomService).findByIdPresentOrException(anyLong());
-        verify(uomService,times(0)).save(any(UnitOfMeasure.class));
+        verify(uomService).save(any());
     }
 
     @Test
-    public void addNewUomEmptyData() throws Exception{
-        mockMvc.perform(post("/uom/new")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("uom",""))
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    public void editExisting() throws Exception
-    {
+    public void editExisting() throws Exception {
         //given
         when(uomService.findById(anyLong())).thenReturn(Optional.of(new UnitOfMeasure()));
 
@@ -158,28 +131,10 @@ public class UnitOfMeasureControllerTest {
     }
 
     @Test
-    public void editIdNotNumber()throws Exception
-    {
+    public void editIdNotNumber() throws Exception {
         mockMvc.perform(get("/uom/1c/edit"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name(Error404));
-    }
-
-    @Test
-    public void editNull() throws Exception
-    {
-        //given
-        when(uomService.findById(anyLong())).thenThrow(new NotFoundException("can't find id"));
-
-        //when
-        mockMvc.perform(get("/uom/11/edit"))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name(Error404));
-
-
-        //then
-        verify(uomService).findById(anyLong());
-
     }
 
 }
