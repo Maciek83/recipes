@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Add Category','../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
+<h2 th:if="${category.id != null}">Edit Category</h2>
+<h2 th:if="${category.id == null}">Add Category</h2>
 <form th:object="${category}" th:action="@{/category/new/}" method="post">
     <label>
         <input type="hidden" th:field="*{id}">
-        <input type="text" th:field="*{name}"/>
+        Name: <input type="text" th:field="*{name}"/>
     </label>
-    <button type="submit">Submit</button>
-    <div th:if="${#fields.hasErrors('*')}">
+    <button class="boxLink" style="float: right" type="submit">Add</button>
+    <div class="error" th:if="${#fields.hasErrors('*')}">
         <p>Please Correct Errors Below</p>
         <span th:if="${#fields.hasErrors('name')}">
             <ul>
@@ -20,6 +20,6 @@
         </span>
     </div>
 </form>
-
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

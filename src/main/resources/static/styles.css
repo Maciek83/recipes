@@ -1,0 +1,253 @@
+:root{
+    --main-color:#5D6AE3;
+    --complementary1:#0B146B;
+    --complementary2:#A9AFE8;
+    --complementary3:#292F63;
+    --complementary4:#4954B3;
+}
+
+*{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px)
+{
+    nav ul{
+        display: flex;
+        justify-content: space-evenly;
+        list-style-type: none;
+        flex-direction: column;
+    }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px)
+{
+    nav ul{
+        display: flex;
+        justify-content: space-evenly;
+        list-style-type: none;
+        flex-direction: column;
+    }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px)
+{
+    nav ul{
+        display: flex;
+        justify-content: space-evenly;
+        list-style-type: none;
+    }
+}
+
+body{
+    width: 50%;
+    margin: 0 auto;
+}
+
+nav{
+    font-family: 'Indie Flower', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 20px 0;
+}
+
+nav ul{
+    display: flex;
+    justify-content: space-evenly;
+    list-style-type: none;
+}
+
+nav a:link, nav a:visited{
+    background-color: var(--main-color);
+    color:white;
+    display: block;
+    width: 160px;
+    text-align: center;
+    padding: 10px 0;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: var(--complementary1);
+}
+
+footer{
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px 0;
+    border-top: green 1px solid;
+}
+
+a{
+    font-family: 'Righteous', cursive;
+}
+
+p{
+    font-family: 'Righteous', cursive;
+    margin: 20px 0;
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+h3{
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+.boxLink
+{
+    font-family: 'Indie Flower', cursive;
+    border-radius: 10px;
+    text-decoration: none;
+    font-style: oblique;
+    color: white;
+    padding: 10px;
+    background-color: #0B146B;
+}
+
+.center{
+    text-align: center;
+    margin: 20px 0;
+}
+
+.links{
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.boxLink:hover{
+    background-color: crimson;
+}
+
+.fontR
+{
+    font-family: 'Righteous', cursive;
+}
+
+/*Table Start*/
+
+table {
+    font-family: 'Righteous', cursive;
+    width: 50%;
+    margin: 20px auto;
+    border: 1px solid #1C6EA4;
+    background-color: #EEEEEE;
+    text-align: center;
+    border-collapse: collapse;
+}
+table. td, table th {
+    border: 1px solid #AAAAAA;
+    padding: 6px 4px;
+}
+table tbody td {
+    font-size: 14px;
+}
+table tr:nth-child(even) {
+    background: #D0E4F5;
+}
+table thead {
+    background: #1C6EA4;
+    background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    border-bottom: 2px solid #444444;
+}
+table thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFFFFF;
+    border-left: 2px solid #D0E4F5;
+}
+table thead th:first-child {
+    border-left: none;
+}
+
+table tfoot {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: #D0E4F5;
+    background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+    background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+    background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+    border-top: 2px solid #444444;
+}
+table tfoot td {
+    font-size: 14px;
+}
+table tfoot .links {
+    text-align: right;
+}
+table tfoot .links a{
+    display: inline-block;
+    background: #1C6EA4;
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+/*Table End*/
+
+/*Form Start*/
+
+form {
+    flex-direction: column;
+    margin-bottom:40px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 50%;
+    padding: 20px 12px 10px 20px;
+    font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+
+form label{
+    padding:0;
+    display:block;
+    font-weight: bold;
+}
+
+
+/*Form End*/
+
+hr.style-seven {
+    overflow: visible; /* For IE */
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 20px;
+}
+hr.style-seven:before { /* Not really supposed to work, but does */
+    display: block;
+    content: "";
+    height: 30px;
+    margin-top: -31px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 20px;
+}
+
+.error{
+    margin-top: 50px ;
+    color: red;
+}

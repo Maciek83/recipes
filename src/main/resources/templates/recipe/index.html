@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Recipes</title>
-</head>
+<head th:replace="~{header :: meta ('Show Recipes','styles.css')}"></head>
 <body>
-<h2>Recipes</h2>
-<a th:href="@{'/recipe/add'}">Add</a>
-<table>
+<nav th:replace="~{header :: menu}"></nav>
+<h1>Recipes</h1>
+<table th:if="${recipes.iterator().hasNext()}">
     <thead>
     <tr>
-        <th>Id</th>
+        <th>Show recipe</th>
         <th>Name</th>
         <th>Difficulty</th>
     </tr>
@@ -23,6 +20,9 @@
     </tr>
     </tbody>
 </table>
-
+<div class="center">
+    <a class="boxLink" th:href="@{'/recipe/add'}">Add Recipe</a>
+</div>
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

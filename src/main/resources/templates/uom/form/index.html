@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Add Unit of Measure','../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
+<h2 th:if="${uom.id != null}">Edit Unit of Measure</h2>
+<h2 th:if="${uom.id == null}">Add Unit of Measure</h2>
 <!--/*@thymesVar id="uom" type="com.mgosciminski.recipe.domain.UnitOfMeasure"*/-->
 <form th:object="${uom}" th:action="@{/uom/new/}" method="post">
     <label>
         <input type="hidden" th:field="*{id}">
-        <input type="text" th:field="*{description}"/>
+        Description: <input type="text" th:field="*{description}"/>
     </label>
-    <button type="submit">Submit</button>
-    <div th:if="${#fields.hasErrors('*')}">
+    <button class="boxLink" style="float: right" type="submit">Add</button>
+    <div class="error" th:if="${#fields.hasErrors('*')}">
         <p>Please Correct Errors Below</p>
         <span th:if="${#fields.hasErrors('description')}">
             <ul>
@@ -21,5 +21,6 @@
         </span>
     </div>
 </form>
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

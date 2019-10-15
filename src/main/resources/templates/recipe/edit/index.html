@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Show Recipes','../../styles.css')}"></head>
 <body>
-<h2>Add new recipe</h2>
-<a th:href="@{'/recipe/'+${recipe.id}}">Back to recipe</a>
+<nav th:replace="~{header :: menu}"></nav>
+<h2>Edit recipe</h2>
+<div class="center">
+    <a th:href="@{'/recipe/'+${recipe.id}}">Back to recipe</a>
+</div>
 <form th:object="${recipe}" th:action="@{/recipe/__${recipe.id}__/edit}" method="post">
-    <label>
-        <input type="text" th:field="*{description}">
-        <input type="text" th:field="*{prepTime}">
-        <input type="text" th:field="*{cookTime}">
-        <input type="text" th:field="*{servings}">
-        <input type="text" th:field="*{source}">
-        <input type="text" th:field="*{url}">
-        <textarea type="text" th:field="*{directions}"></textarea>
-        <select th:field = "*{difficulty}">
-            <option th:each="d: ${diff}" th:value="${d}" th:text="${d.toString()}" th:selected="(${diff}==${recipe.difficulty})"></option>
-        </select>
-    </label>
-    <button type="submit">Submit</button>
-    <div th:if="${#fields.hasErrors('*')}">
+    <label class="links">Description: <input type="text" th:field="*{description}"></label>
+    <label class="links">Prep Time: <input type="text" th:field="*{prepTime}"></label>
+    <label class="links">Cook Time: <input type="text" th:field="*{cookTime}"></label>
+    <label class="links">Servings: <input type="text" th:field="*{servings}"></label>
+    <label class="links">Source: <input type="text" th:field="*{source}"></label>
+    <label class="links">Url: <input type="text" th:field="*{url}"></label>
+    <label class="links">Directions: <textarea th:field="*{directions}"></textarea></label>
+    <label>Difficulty: <select th:field="*{difficulty}">
+        <option th:each="d: ${diff}" th:value="${d}" th:text="${d.toString()}"
+                th:selected="(${diff}==${recipe.difficulty})"></option>
+    </select></label>
+
+    <button class="boxLink" style="float: right" type="submit">Submit</button>
+    <div class="error" th:if="${#fields.hasErrors('*')}">
         <p>Please Correct Errors Below</p>
         <span th:if="${#fields.hasErrors('description')}">
             <ul>
@@ -65,6 +65,6 @@
         </span>
     </div>
 </form>
-
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

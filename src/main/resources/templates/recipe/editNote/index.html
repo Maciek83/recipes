@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Edit Note','../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
 <h2>Edit note</h2>
-<form th:object="${note}" th:action="@{/recipe/__${recipe.id}__/note/}" method="post">
+<div class="center">
+<a th:href="@{'/recipe/' + ${recipe.id}}">Back To Recipe</a>
+</div>
+<form th:object="${note}" th:action="@{/recipe/__${recipe.id}__/note}" method="post">
     <label>
         <input type="hidden" th:field="*{id}" th:value="*{id}">
-        <textarea name="notes" th:field="*{description}" th:value="*{description}"></textarea>
+        Description: <textarea name="notes" th:field="*{description}" th:value="*{description}"></textarea>
     </label>
-    <button type="submit">Submit</button>
-    <div th:if="${#fields.hasErrors('*')}">
+    <button class="boxLink" style="float: right" type="submit">Add</button>
+    <div class="error" th:if="${#fields.hasErrors('*')}">
         <p>Please Correct Errors Below</p>
         <span th:if="${#fields.hasErrors('description')}">
             <ul>
@@ -21,6 +22,6 @@
         </span>
     </div>
 </form>
-
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

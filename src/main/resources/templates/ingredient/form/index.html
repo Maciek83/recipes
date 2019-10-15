@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Add Ingredient','../../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
 <h2>Add Ingredient</h2>
+<div class="center">
+<a th:href="@{'/recipe/' + ${recipe.id}}">Back To Recipe</a>
+</div>
 <form th:object="${ingredient}" th:action="@{/recipe/__${recipe.id}__/ingredient/add}" method="post">
-    <label>
-        <input type="text" th:field="${ingredient.description}"/>
-        <input type="text" th:field="${ingredient.amount}"/>
-        <select name="u.id" th:field="${ingredient.unitOfMeasure}" >
+
+        <label class="links">Description: <input type="text" th:field="${ingredient.description}"/><br></label>
+        <label class="links">Amount: <input type="text" th:field="${ingredient.amount}"/><br></label>
+        <label>Unit of Measure: <select name="u.id" th:field="${ingredient.unitOfMeasure}" >
             <option th:each="u: ${uoms}" th:value="${{u.id}}" th:text="${u.description}"></option>
-        </select>
-    </label>
-    <button type="submit">Submit</button>
-    <div th:if="${#fields.hasErrors('*')}">
+        </select></label>
+
+    <button class="boxLink" style="float: right" type="submit">Add</button>
+    <div class="error" th:if="${#fields.hasErrors('*')}">
         <p>Please Correct Errors Below</p>
         <span th:if="${#fields.hasErrors('description')}">
             <ul>
-                <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                Description: <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
             </ul>
         </span>
         <span th:if="${#fields.hasErrors('amount')}">
             <ul>
-                <li th:each="err : ${#fields.errors('amount')}" th:text="${err}"></li>
+                Amount: <li th:each="err : ${#fields.errors('amount')}" th:text="${err}"></li>
             </ul>
         </span>
         <span th:if="${#fields.hasErrors('unitOfMeasure')}">
@@ -34,6 +35,6 @@
         </span>
     </div>
 </form>
-
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

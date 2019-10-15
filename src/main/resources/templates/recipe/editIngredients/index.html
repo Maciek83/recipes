@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Edit Ingredients','../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
 
 <h2>Ingredients</h2>
 
+<div class="center">
 <a th:href="@{'/recipe/' + ${recipe.id}}">Back To Recipe</a>
+</div>
 
-<div th:each="i : ${ingredients}">
-    <span th:text="${i.description}"></span>
-    <span th:text="${i.unitOfMeasure.description}"></span>
+<div class="center" th:each="i : ${ingredients}">
+    Description: <span class="fontR" th:text="${i.description}"></span><br>
+    Unit of Measure: <span class="fontR" th:text="${i.unitOfMeasure.description}"></span><br>
     <a th:href="@{'/ingredient/' + ${i.id}+'/delete'}">Delete</a>
 </div>
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

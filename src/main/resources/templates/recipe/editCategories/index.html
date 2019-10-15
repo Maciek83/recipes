@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header :: meta ('Edit Categories','../../styles.css')}"></head>
 <body>
+<nav th:replace="~{header :: menu}"></nav>
 <h2>Edit categories</h2>
+<div class="center">
+    <a th:href="@{'/recipe/' + ${recipe.id}}">Back To Recipe</a>
+</div>
 
-<form th:object="${recipe}" th:action="@{/recipe/__${recipe.id}__/categories/}" method="post">
-    <label>
+<form th:object="${recipe}" th:action="@{/recipe/__${recipe.id}__/categories}" method="post">
+
 
         <span th:each="c : ${allcategories}">
+            <label>
         <input type="checkbox" name="id" th:field="*{categories}" th:value="${c.id}">
+            </label>
             <span th:text="${c.name}"></span>
         </span>
 
-    </label>
-    <button type="submit">Submit</button>
-</form>
 
+    <button class="boxLink" style="float:right" type="submit">Submit</button>
+</form>
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

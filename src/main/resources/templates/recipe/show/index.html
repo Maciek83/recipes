@@ -1,58 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>View recipe</title>
-</head>
+<head th:replace="~{header :: meta ('Recipes','../styles.css')}"></head>
 <body>
-<a th:href="@{'/recipe/'}">Back to recipes</a>
-<h2>Recipes</h2>
-<a th:href="@{'/recipe/'+${recipe.id}+'/edit'}">Edit</a>
-<a th:href="@{'/recipe/'+${recipe.id}+'/delete'}">Delete</a>
-<table>
-    <thead>
-    <tr>
-        <th>Description</th>
-        <th>Prep Time</th>
-        <th>Cook Time</th>
-        <th>Servings</th>
-        <th>Source</th>
-        <th>Url</th>
-        <th>Directions</th>
-        <th>Difficulty</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${recipe.description}"></td>
-        <td th:text="${recipe.prepTime}"></td>
-        <td th:text="${recipe.cookTime}"></td>
-        <td th:text="${recipe.servings}"></td>
-        <td th:text="${recipe.source}"></td>
-        <td th:text="${recipe.url}"></td>
-        <td th:text="${recipe.directions}"></td>
-        <td th:text="${recipe.difficulty}"></td>
-    </tr>
-    </tbody>
-</table>
-
-<h2>Notes</h2>
-<a th:href="@{'/recipe/'+${recipe.id}+'/note'}">Edit</a>
-
-<p th:if="${recipe.notes != null}" th:text="${recipe.notes.description}"></p>
-
-<h2>Ingredients</h2>
-<a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/add'}">Add</a>
-<a th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
-<div th:each="i: ${recipe.ingredients}">
-    <p th:text="${i.description}"></p>
+<nav th:replace="~{header :: menu}"></nav>
+<div class="center">
+    <a th:href="@{'/recipe'}">Back to recipes</a>
 </div>
-
+<div class="links">
+    <a class="boxLink" th:href="@{'/recipe/'+${recipe.id}+'/edit'}">Edit</a>
+    <h1>Recipe</h1>
+    <a class="boxLink" th:href="@{'/recipe/'+${recipe.id}+'/delete'}">Delete</a>
+</div>
+<hr class="style-seven">
+<h3>Description</h3>
+<p th:text="${recipe.description}"></p>
+<h3>Prep Time</h3>
+<p th:text="${recipe.prepTime}"></p>
+<h3>Cook Time</h3>
+<p th:text="${recipe.cookTime}"></p>
+<h3>Servings</h3>
+<p th:text="${recipe.servings}"></p>
+<h3>Source</h3>
+<p th:text="${recipe.source}"></p>
+<h3>Url</h3>
+<p th:text="${recipe.url}"></p>
+<h3>Directions</h3>
+<p th:text="${recipe.directions}"></p>
+<h3>Difficulty</h3>
+<p th:text="${recipe.difficulty}"></p>
+<hr class="style-seven">
+<h2>Notes</h2>
+<div class="center">
+    <a class="boxLink" th:href="@{'/recipe/'+${recipe.id}+'/note'}">Edit</a>
+</div>
+<p th:if="${recipe.notes != null}" th:text="${recipe.notes.description}"></p>
+<hr class="style-seven">
+<div class="links">
+    <a class="boxLink" th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/add'}">Add</a>
+    <h2>Ingredients</h2>
+    <a class="boxLink" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
+</div>
+<div th:each="i: ${recipe.ingredients}">
+    <p th:text="${i.description} + ' ' + ${i.amount}+${i.unitOfMeasure.description}"></p>
+</div>
+<hr class="style-seven">
 <h2>Categories</h2>
-<a th:href="@{'/recipe/' + ${recipe.id} + '/categories'}">Edit</a>
+<div class="center">
+    <a class="boxLink" th:href="@{'/recipe/' + ${recipe.id} + '/categories'}">Edit</a>
+</div>
 <div th:each="c: ${recipe.categories}">
     <p th:text="${c.name}"></p>
 </div>
-
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

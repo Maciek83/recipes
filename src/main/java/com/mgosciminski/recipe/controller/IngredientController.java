@@ -34,7 +34,8 @@ public class IngredientController {
 
         Ingredient ingredient = ingredientService.findById(Long.valueOf(id));
         Long recipeId = ingredient.getRecipe().getId();
-        ingredientService.delete(ingredient);
+        ingredient.getRecipe().getIngredients().remove(ingredient);
+        ingredientService.deleteById(Long.valueOf(id));
 
         return "redirect:/recipe/"+ recipeId +"/ingredients";
     }
