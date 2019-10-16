@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Unit of Measure','styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Unit of Measure</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{styles.css}">
+</head>
 <body>
 <nav th:replace="~{header :: menu}"></nav>
-<h2>Unit of measure</h2>
+<h1>Unit of measure</h1>
 <table th:if="${uoms.iterator().hasNext()}" id="uoms">
     <thead>
     <tr>

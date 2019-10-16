@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Edit Note','../../styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Note</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{../../styles.css}">
+</head>
 <body>
 <nav th:replace="~{header :: menu}"></nav>
 <h2>Edit note</h2>

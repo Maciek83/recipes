@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Edit Categories','../../styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Categories</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{../../styles.css}">
+</head>
 <body>
 <nav th:replace="~{header :: menu}"></nav>
 <h2>Edit categories</h2>
@@ -12,10 +17,10 @@
 
 
         <span th:each="c : ${allcategories}">
-            <label>
+            <label><span class="fontR" th:text="${c.name}"></span>
         <input type="checkbox" name="id" th:field="*{categories}" th:value="${c.id}">
             </label>
-            <span th:text="${c.name}"></span>
+
         </span>
 
 

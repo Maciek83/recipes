@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Not Found','styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Not found</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/../../styles.css}">
+</head>
 <body>
 <nav th:insert="~{header :: menu}"></nav>
 <h1>Not found</h1>
-<footer th:insert="~{footer:: footer}"></footer>
+<footer th:replace="~{footer:: footer}"></footer>
 </body>
 </html>

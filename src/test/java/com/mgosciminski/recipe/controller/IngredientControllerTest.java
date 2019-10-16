@@ -66,7 +66,7 @@ public class IngredientControllerTest {
 
         //then
         verify(ingredientService).findById(anyLong());
-        verify(ingredientService).delete(any());
+        verify(ingredientService).deleteById(anyLong());
 
     }
 

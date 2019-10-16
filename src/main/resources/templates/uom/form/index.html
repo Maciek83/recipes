@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Add Unit of Measure','../../styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Unit of Measure</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{../styles.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../../styles.css}">
+
+</head>
 <body>
 <nav th:replace="~{header :: menu}"></nav>
 <h2 th:if="${uom.id != null}">Edit Unit of Measure</h2>

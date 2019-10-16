@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header :: meta ('Add Category','../../styles.css')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Category</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{../styles.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../../styles.css}">
+</head>
 <body>
 <nav th:replace="~{header :: menu}"></nav>
 <h2 th:if="${category.id != null}">Edit Category</h2>
