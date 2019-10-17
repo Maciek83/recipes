@@ -129,6 +129,7 @@ public class RecipeController {
 
         Ingredient newIngredient = new Ingredient();
         newIngredient.setDescription(ingredient.getDescription());
+        newIngredient.setAmount(ingredient.getAmount());
         newIngredient.setUnitOfMeasure(ingredient.getUnitOfMeasure());
 
         Recipe recipe = recipeService.findById(Long.valueOf(id));

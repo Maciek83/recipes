@@ -46,7 +46,7 @@
     <a class="boxLink" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
 </div>
 <div th:each="i: ${recipe.ingredients}">
-    <p th:text="${i.description} + ' ' + ${i.amount}+${i.unitOfMeasure.description}"></p>
+    <p th:text="${i.description} + ' ' + ${i.amount}+ ' ' +${i.unitOfMeasure.description}"></p>
 </div>
 <hr class="style-seven">
 <h2>Categories</h2>
