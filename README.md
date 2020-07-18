@@ -1,4 +1,5 @@
 [![Maciek83](https://circleci.com/gh/Maciek83/recipes.svg?style=svg)](https://circleci.com/gh/Maciek83/recipes)
+[![codecov](https://codecov.io/gh/Maciek83/recipes/branch/master/graph/badge.svg)](https://codecov.io/gh/Maciek83/recipes)
 <ul>
                 <li>Technical
                     <p>I used spring boot (jpa,web,thymeleaf,test).</p>
